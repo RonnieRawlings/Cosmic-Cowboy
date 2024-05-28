@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Menus/SplashScreen.unity
+    guid: dac55f97c4bcf644b9349d15b2c12ef3
+  - enabled: 1
+    path: Assets/Scenes/Menus/MainMenu.unity
+    guid: 527083b621f2b894889ced56624e4820
+  - enabled: 1
+    path: Assets/Scenes/Menus/Credits.unity
+    guid: 3fd801a4fac74c04691f79d90eba1b5a
+  - enabled: 1
+    path: Assets/Scenes/Menus/Gallery.unity
+    guid: 88ceb5923fa57154085c4b09834888d3
+  - enabled: 1
+    path: Assets/Scenes/Gameplay/Levels/Level01.unity
+    guid: e34786e85d02d1342bfff7c0fe146722
+  - enabled: 1
+    path: Assets/Scenes/Gameplay/Levels/Level02.unity
+    guid: f0ac0311fa52853438614e9e92ace5b8
+  - enabled: 1
+    path: Assets/Scenes/Menus/ThankYou.unity
+    guid: 9aee5bba6fd9daf4b8604911ca1b6769
+  - enabled: 1
+    path: Assets/Scenes/Menus/Loading Screens/Level 1/LoadingScreen-Cowboy-Level1.unity
+    guid: eab2d6ba1acc73547959de781a9a18ad
+  - enabled: 1
+    path: Assets/Scenes/Menus/Loading Screens/Level 1/LoadingScreen-T.W.I-Level1.unity
+    guid: bf36adda412904a45b4c46782a1b9eb4
+  - enabled: 1
+    path: Assets/Scenes/Menus/Loading Screens/Level 2/LoadingScreen-T.W.I-Level2.unity
+    guid: 1024f5573ce207b47946ade0de5c1df5
+  - enabled: 1
+    path: Assets/Scenes/Menus/Loading Screens/Level 2/LoadingScreen-Cowboy-Level2.unity
+    guid: 264256fb959814f4db841f1f5c74cdfe
+  - enabled: 1
+    path: Assets/Scenes/Menus/GameReveal.unity
+    guid: f38ee2fc12349ae4f813116558f787ad
+  - enabled: 1
+    path: Assets/Scenes/Menus/SkillSelect.unity
+    guid: 40f936d588c629847bebe0a2e1a68d79
+  - enabled: 1
+    path: Assets/Scenes/Menus/Loading Screens/Level 1/LoadingScreen-Tank-Level1.unity
+    guid: 1d1010ccfae2987458f034d1d47b743c
+  - enabled: 1
+    path: Assets/Scenes/Menus/Loading Screens/Level 2/LoadingScreen-Tank-Level2.unity
+    guid: 903a281f976c9f84c821b376f42fee47
+  - enabled: 1
+    path: Assets/Scenes/Menus/SkillSelect 2.unity
+    guid: f9f34db762667654fb5fe03274fe4691
+  m_configObjects: {}

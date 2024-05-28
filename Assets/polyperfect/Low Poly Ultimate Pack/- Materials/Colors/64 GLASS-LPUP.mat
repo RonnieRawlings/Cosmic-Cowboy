@@ -1,0 +1,105 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 64 GLASS-LPUP
+  m_Shader: {fileID: 4800000, guid: 933f24cde1e3f6a41818f56d729421ab, type: 3}
+  m_Parent: {fileID: 2100000, guid: 98bd839fdafe6e840b0c2c045dac7c13, type: 2}
+  m_ModifiedSerializedProperties: 16
+  m_ValidKeywords:
+  - _HALFTONESHAPE_DOT
+  - _NORMALMAP
+  - _OUTLINE
+  - _SPECULARHIGHLIGHTS_OFF
+  - _SPECULAR_SETUP
+  m_InvalidKeywords:
+  - _ALPHAMODULATE_ON
+  - _SPECULAR_COLOR
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: 2050
+  stringTagMap:
+    RenderType: Opaque
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _BaseMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _EmissionMap:
+        m_Texture: {fileID: 2800000, guid: 79d6390892d8a494dbe4e12301c0b3c8, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _HalfToneNoiseMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _RampTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _Blend: 2
+    - _BrushSize: 0.8
+    - _Cutoff: 0.506
+    - _DstBlend: 0
+    - _FaceShadowSmoothness: 0
+    - _GlossMapScale: 1
+    - _Glossiness: 1
+    - _GlossyReflections: 1
+    - _HalfToneEnabled: 0
+    - _HalfToneIncludeReceivedShadow: 0
+    - _HalfToneShape: 0
+    - _HalftoneFadeDistance: 10
+    - _HalftoneNoiseClip: 0.8
+    - _HalftoneTilling: 8
+    - _Parallax: 0.02
+    - _RimEnabled: 0
+    - _RimLightAlign: 0
+    - _RimLightSmoothness: 0
+    - _RimPower: 0.55
+    - _Smoothness: 1
+    - _SpecularFalloff: 0
+    - _SpecularHighlights: 0
+    - _SpecularSize: 0.152
+    - _StepViaRampTexture: 0
+    - _Surface: 0
+    - _ToonBlending: 1
+    - _ToonEnabled: 0
+    - _WorkflowMode: 0
+    - _ZWrite: 1
+    m_Colors:
+    - _BaseColor: {r: 0.24329586, g: 0.3055125, b: 0.33088237, a: 1}
+    - _Color: {r: 0.24329586, g: 0.3055125, b: 0.33088237, a: 1}
+    - _EmissionColor: {r: 2, g: 2, b: 2, a: 1}
+    - _HalfToneColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _SpecColor: {r: 0.32306868, g: 0.35880733, b: 0.41509432, a: 1}
+  m_BuildTextureStacks: []
+--- !u!114 &7206800610610932375
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 7

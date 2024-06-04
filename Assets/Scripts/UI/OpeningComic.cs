@@ -30,7 +30,6 @@ public class OpeningComic : MonoBehaviour
     public void SkipComic()
     {
         var action = InputManager.playerControls.Basic.Skip;
-        if (InputManager.isArcade) { action = InputManager.playerControls.Basic.ArcadeSkip; }
 
         if (action.IsPressed() && !isSkipping)
         {

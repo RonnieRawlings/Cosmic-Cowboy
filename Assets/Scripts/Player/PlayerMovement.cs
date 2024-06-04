@@ -74,46 +74,23 @@ public class PlayerMovement : MonoBehaviour
             // Get the camera's forward and right vectors, ignore Y-axis.
             Vector3 cameraForward = Vector3.Scale(Camera.main.transform.parent.forward, new Vector3(1, 0, 1)).normalized;
             Vector3 cameraRight = Vector3.Scale(Camera.main.transform.parent.right, new Vector3(1, 0, 1)).normalized;
-
-            if (InputManager.isArcade)
+                
+            // Checks for WASD, Arrow Keys, and D-Pad key presses.          
+            if (InputManager.playerControls.Movement.MoveForward.WasPressedThisFrame())
+            {                   
+                directionIndex = GetDirectionIndex(cameraForward);               
+            }            
+            else if (InputManager.playerControls.Movement.MoveLeft.WasPressedThisFrame())                
             {
-                // Checks for WASD, Arrow Keys, and D-Pad key presses.
-                if (InputManager.playerControls.ArcadeMovement.MoveForward.WasPressedThisFrame())
-                {
-                    directionIndex = GetDirectionIndex(cameraForward);
-                }
-                else if (InputManager.playerControls.ArcadeMovement.MoveLeft.WasPressedThisFrame())
-                {
-                    directionIndex = GetDirectionIndex(-cameraRight);
-                }
-                else if (InputManager.playerControls.ArcadeMovement.MoveRight.WasPressedThisFrame())
-                {
-                    directionIndex = GetDirectionIndex(cameraRight);
-                }
-                else if (InputManager.playerControls.ArcadeMovement.MoveBack.WasPressedThisFrame())
-                {
-                    directionIndex = GetDirectionIndex(-cameraForward);
-                }
-            }
-            else
-            {
-                // Checks for WASD, Arrow Keys, and D-Pad key presses.
-                if (InputManager.playerControls.Movement.MoveForward.WasPressedThisFrame())
-                {
-                    directionIndex = GetDirectionIndex(cameraForward);
-                }
-                else if (InputManager.playerControls.Movement.MoveLeft.WasPressedThisFrame())
-                {
-                    directionIndex = GetDirectionIndex(-cameraRight);
-                }
-                else if (InputManager.playerControls.Movement.MoveRight.WasPressedThisFrame())
-                {
-                    directionIndex = GetDirectionIndex(cameraRight);
-                }
-                else if (InputManager.playerControls.Movement.MoveBack.WasPressedThisFrame())
-                {
-                    directionIndex = GetDirectionIndex(-cameraForward);
-                }
+                directionIndex = GetDirectionIndex(-cameraRight);               
+            }               
+            else if (InputManager.playerControls.Movement.MoveRight.WasPressedThisFrame())                
+            {                   
+                directionIndex = GetDirectionIndex(cameraRight);               
+            }              
+            else if (InputManager.playerControls.Movement.MoveBack.WasPressedThisFrame())                
+            {                    
+                directionIndex = GetDirectionIndex(-cameraForward);                
             }
 
             // Moves the player if an input has been received.
@@ -594,14 +571,8 @@ public class PlayerMovement : MonoBehaviour
             MoveToStartNode();
         }
 
-        // Prevents checking if in ArcadeMode & not in move mode.
-        if (InputManager.isArcade && InputManager.actionBarMode) { return; }
-
-        // Allows player to move on key press.
-        WASDTileMovement();
-
-        // Finds path from player to mouse node.
-        if (!InputManager.isArcade) { MouseTileMovement(); }
+        // Checks for mouse movement.
+        MouseTileMovement();
     }
 
     private void OnDisable()

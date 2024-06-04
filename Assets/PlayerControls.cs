@@ -225,24 +225,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": ""Hold"",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""ArcadeSkip"",
-                    ""type"": ""Button"",
-                    ""id"": ""e8018406-f367-4690-9de0-ba88f63299f9"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": ""Hold"",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""AracdeToggle"",
-                    ""type"": ""Button"",
-                    ""id"": ""dc4098d3-a62a-4a68-b045-a81163c4b878"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": ""Tap"",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -320,28 +302,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Skip"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""9c91c014-cde6-45b9-81f7-637918202054"",
-                    ""path"": ""<Keyboard>/b"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""ArcadeSkip"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""8d8d9d4a-b308-471f-a589-46298dc71c12"",
-                    ""path"": ""<Keyboard>/m"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""AracdeToggle"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -521,8 +481,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Basic_Submit = m_Basic.FindAction("Submit", throwIfNotFound: true);
         m_Basic_Tab = m_Basic.FindAction("Tab", throwIfNotFound: true);
         m_Basic_Skip = m_Basic.FindAction("Skip", throwIfNotFound: true);
-        m_Basic_ArcadeSkip = m_Basic.FindAction("ArcadeSkip", throwIfNotFound: true);
-        m_Basic_AracdeToggle = m_Basic.FindAction("AracdeToggle", throwIfNotFound: true);
         // Camera
         m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
         m_Camera_RotateLeft = m_Camera.FindAction("RotateLeft", throwIfNotFound: true);
@@ -676,8 +634,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Basic_Submit;
     private readonly InputAction m_Basic_Tab;
     private readonly InputAction m_Basic_Skip;
-    private readonly InputAction m_Basic_ArcadeSkip;
-    private readonly InputAction m_Basic_AracdeToggle;
     public struct BasicActions
     {
         private @PlayerControls m_Wrapper;
@@ -686,8 +642,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @Submit => m_Wrapper.m_Basic_Submit;
         public InputAction @Tab => m_Wrapper.m_Basic_Tab;
         public InputAction @Skip => m_Wrapper.m_Basic_Skip;
-        public InputAction @ArcadeSkip => m_Wrapper.m_Basic_ArcadeSkip;
-        public InputAction @AracdeToggle => m_Wrapper.m_Basic_AracdeToggle;
         public InputActionMap Get() { return m_Wrapper.m_Basic; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -709,12 +663,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Skip.started += instance.OnSkip;
             @Skip.performed += instance.OnSkip;
             @Skip.canceled += instance.OnSkip;
-            @ArcadeSkip.started += instance.OnArcadeSkip;
-            @ArcadeSkip.performed += instance.OnArcadeSkip;
-            @ArcadeSkip.canceled += instance.OnArcadeSkip;
-            @AracdeToggle.started += instance.OnAracdeToggle;
-            @AracdeToggle.performed += instance.OnAracdeToggle;
-            @AracdeToggle.canceled += instance.OnAracdeToggle;
         }
 
         private void UnregisterCallbacks(IBasicActions instance)
@@ -731,12 +679,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Skip.started -= instance.OnSkip;
             @Skip.performed -= instance.OnSkip;
             @Skip.canceled -= instance.OnSkip;
-            @ArcadeSkip.started -= instance.OnArcadeSkip;
-            @ArcadeSkip.performed -= instance.OnArcadeSkip;
-            @ArcadeSkip.canceled -= instance.OnArcadeSkip;
-            @AracdeToggle.started -= instance.OnAracdeToggle;
-            @AracdeToggle.performed -= instance.OnAracdeToggle;
-            @AracdeToggle.canceled -= instance.OnAracdeToggle;
         }
 
         public void RemoveCallbacks(IBasicActions instance)
@@ -892,8 +834,6 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnSubmit(InputAction.CallbackContext context);
         void OnTab(InputAction.CallbackContext context);
         void OnSkip(InputAction.CallbackContext context);
-        void OnArcadeSkip(InputAction.CallbackContext context);
-        void OnAracdeToggle(InputAction.CallbackContext context);
     }
     public interface ICameraActions
     {

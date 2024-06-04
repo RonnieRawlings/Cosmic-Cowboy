@@ -57,7 +57,7 @@ public class ArcadeActions : MonoBehaviour
     void Update()
     {
         // Prevents this script from running when normal build.
-        if (!InputManager.isArcade || !InputManager.actionBarMode) { if (InputManager.isArcade) { Reset(); } return; }
+        if (!InputManager.actionBarMode) { return; }
 
         if (BattleInfo.inAnimation || BattleInfo.fungusPlaying || BattleInfo.fungusOverride) { Reset(); }
 

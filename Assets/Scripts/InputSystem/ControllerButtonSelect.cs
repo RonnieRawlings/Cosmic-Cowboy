@@ -37,9 +37,7 @@ public class ControllerButtonSelect : MonoBehaviour
             return; 
         }
 
-        bool currentCheck;
-        if (InputManager.isArcade) { currentCheck = InputManager.isArcade; }
-        else { currentCheck = InputManager.IsUsingController; }
+        bool currentCheck = InputManager.IsUsingController;
        
         if (currentCheck && !lastCheck)
         {

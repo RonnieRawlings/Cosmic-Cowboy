@@ -203,24 +203,6 @@
                     "processors": "",
                     "interactions": "Hold",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "ArcadeSkip",
-                    "type": "Button",
-                    "id": "e8018406-f367-4690-9de0-ba88f63299f9",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Hold",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "AracdeToggle",
-                    "type": "Button",
-                    "id": "dc4098d3-a62a-4a68-b045-a81163c4b878",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "Tap",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -298,28 +280,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "Skip",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "9c91c014-cde6-45b9-81f7-637918202054",
-                    "path": "<Keyboard>/b",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "ArcadeSkip",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "8d8d9d4a-b308-471f-a589-46298dc71c12",
-                    "path": "<Keyboard>/m",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "AracdeToggle",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

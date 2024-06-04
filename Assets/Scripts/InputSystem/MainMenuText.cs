@@ -11,7 +11,7 @@ public class MainMenuText : MonoBehaviour
 
     void Update()
     {
-        if (!InputManager.IsUsingController && !InputManager.isArcade) { return; }
+        if (!InputManager.IsUsingController) { return; }
 
         if (EventSystem.current.currentSelectedGameObject == this.gameObject)
         {

@@ -8,18 +8,12 @@ public class InputManager : MonoBehaviour
 {
     // Allows access to all controls.
     public static PlayerControls playerControls;
-
     public static bool IsUsingController { get; private set; }
-
-    public static bool isArcade;
 
     public static bool actionBarMode;
 
     InputManager()
     {
-        // Is this an arcade build.
-        isArcade = false;
-
         // Starting joystick mode.
         actionBarMode = false;
     }
@@ -33,12 +27,6 @@ public class InputManager : MonoBehaviour
 
     void Update()
     {
-        // Toggles actionBarMode.
-        if (playerControls.Basic.AracdeToggle.WasPressedThisFrame() && isArcade) { actionBarMode = !actionBarMode; }
-
-        // No checks if arcade machine.
-        if (isArcade) { return; }
-
         // Check for mouse movement or left click
         if (Input.GetAxisRaw("Mouse X") != 0 || Input.GetAxisRaw("Mouse Y") != 0 || Input.GetMouseButton(0))
         {

@@ -20,6 +20,9 @@ public static class BattleInfo
     // Ref to all levelEnemies stats.
     public static Dictionary<GameObject, EnemyStats> levelEnemyStats;
 
+    // Enemy in range check.
+    public static CheckRange checkRange;
+
     // Keeps track of who's turn it is.
     public static bool playerTurn = true, aiTurn = false;
 
@@ -180,5 +183,7 @@ public static class BattleInfo
         levelEnemyStats.Clear();
 
         nodeObjects.Clear();
+
+        checkRange = null;
     }
 }

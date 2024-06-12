@@ -321,6 +321,11 @@ PrefabInstance:
       propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[8].m_Target
       value: 
       objectReference: {fileID: 1934390718}
+    - target: {fileID: 3277961645511233937, guid: 675bb12805e700e49a31679e9473a12b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4023018197129724484, guid: 675bb12805e700e49a31679e9473a12b,
         type: 3}
       propertyPath: m_IsActive
@@ -1237,7 +1242,7 @@ PrefabInstance:
     - target: {fileID: 8396072284165188845, guid: b32a1378f62dc9a49bd252828436ac69,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -35.36
+      value: -21.34
       objectReference: {fileID: 0}
     - target: {fileID: 8396072284165188845, guid: b32a1378f62dc9a49bd252828436ac69,
         type: 3}
@@ -1247,7 +1252,7 @@ PrefabInstance:
     - target: {fileID: 8396072284165188845, guid: b32a1378f62dc9a49bd252828436ac69,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 5.07
+      value: 11.82
       objectReference: {fileID: 0}
     - target: {fileID: 8396072284165188845, guid: b32a1378f62dc9a49bd252828436ac69,
         type: 3}

@@ -41,6 +41,7 @@ public class CheckAIStatus : MonoBehaviour
             {
                 GetComponent<AIMovement>().CurrentNode.Occupied = null;
             }
+            BattleInfo.checkRange.RemoveInRangeIcon(this.gameObject);
            
             // Disable components
             GetComponent<AIMovement>().enabled = false;

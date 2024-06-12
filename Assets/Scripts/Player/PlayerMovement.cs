@@ -356,6 +356,9 @@ public class PlayerMovement : MonoBehaviour
         GetComponent<Animator>().SetFloat("differentIdles", Random.Range(0, 2));
         GetComponent<Animator>().SetBool("isWalking", false);
 
+        // Update enemies in range.
+        BattleInfo.checkRange.CheckForEnemies();
+
         // Waits before changing turns.
         yield return new WaitForSeconds(0.75f);
 
@@ -451,6 +454,9 @@ public class PlayerMovement : MonoBehaviour
         // Ends walking animation.
         GetComponent<Animator>().SetFloat("differentIdles", Random.Range(0, 2));
         GetComponent<Animator>().SetBool("isWalking", false);
+
+        // Update enemies in range.
+        BattleInfo.checkRange.CheckForEnemies();
 
         // Waits before changing turns.
         yield return new WaitForSeconds(0.75f);

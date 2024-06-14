@@ -23,6 +23,9 @@ public static class BattleInfo
     // Enemy in range check.
     public static CheckRange checkRange;
 
+    // Should lock to enemy.
+    public static bool lockOnEnemy = false;
+
     // Keeps track of who's turn it is.
     public static bool playerTurn = true, aiTurn = false;
 
@@ -176,6 +179,7 @@ public static class BattleInfo
     public static void ResetLevelInfo()
     {
         gamePaused = false;
+        lockOnEnemy = false;
 
         levelEnemiesList.Clear();
         levelEnemies.Clear();        

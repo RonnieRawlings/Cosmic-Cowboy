@@ -18,6 +18,9 @@ public class CheckRange : MonoBehaviour
         // Instantiates icon as child, adds to dict.
         GameObject newIcon = Instantiate(inRangeIcon, this.transform);
         inRangeIcons.Add(enemy, newIcon);
+
+        // Assign enemy to icon.
+        newIcon.GetComponent<EnemiesInRange>().AssignedEnemy = enemy;
     }
 
     /// <summary> method <c>RemoveInRangeIcon</c> removes the icon from the scene if enemy no longer in range of player. </summary>

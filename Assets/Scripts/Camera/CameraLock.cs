@@ -99,7 +99,7 @@ public class CameraLock : MonoBehaviour
             currentIndex = 0;
 
             // Forces camera to follow player.
-            PlayerLockOn();                  
+            if (!BattleInfo.lockOnEnemy) { PlayerLockOn(); }                    
         }
         else if (BattleInfo.aiTurn)
         {

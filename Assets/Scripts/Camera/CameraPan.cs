@@ -115,6 +115,6 @@ public class CameraPan : MonoBehaviour
     void Update()
     {
         // Allows camera to be panned.
-        PanCamera();
+        if (!BattleInfo.camBehind) { PanCamera(); }
     }
 }

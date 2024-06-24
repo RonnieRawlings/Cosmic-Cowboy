@@ -23,8 +23,8 @@ public static class BattleInfo
     // Enemy in range check.
     public static CheckRange checkRange;
 
-    // Should lock to enemy.
-    public static bool lockOnEnemy = false;
+    // Should lock to enemy/is cam behind player.
+    public static bool lockOnEnemy = false, camBehind = false;
 
     // Keeps track of who's turn it is.
     public static bool playerTurn = true, aiTurn = false;
@@ -180,6 +180,7 @@ public static class BattleInfo
     {
         gamePaused = false;
         lockOnEnemy = false;
+        camBehind = false;
 
         levelEnemiesList.Clear();
         levelEnemies.Clear();        

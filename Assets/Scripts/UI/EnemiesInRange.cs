@@ -3,7 +3,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
-
+using UnityEngine.UI;
 public class EnemiesInRange : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     // Enemy assigned to this in range obj.
@@ -37,6 +37,10 @@ public class EnemiesInRange : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     {
         // Sets ref to cam lock script.
         camLock = Camera.main.GetComponent<CameraLock>();
+
+        // Call camera behind method on UI icon click.
+        GetComponent<Button>().onClick.AddListener(Camera.main.GetComponent
+            <UIEnemySelect>().CallPositionCamBehind);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -59,6 +63,8 @@ public class EnemiesInRange : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         // Is mouse over the UI obj.
         while (isMouseOver)
         {
+            if (BattleInfo.camBehind) { break; }
+
             LockOnToEnemy();
             yield return null;
         }

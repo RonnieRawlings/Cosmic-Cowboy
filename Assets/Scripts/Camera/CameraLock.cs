@@ -90,7 +90,8 @@ public class CameraLock : MonoBehaviour
     {
         if (BattleInfo.playerDiedThisLoad) { BattleInfo.aiTurn = false; }
 
-        if (BattleInfo.fungusOverride) { return; }
+        // Prevent camLock if in cutscene or enemy selected.
+        if (BattleInfo.fungusOverride || BattleInfo.camBehind) { return; }
 
         // Followed obj is decided by current turn.
         if (!BattleInfo.aiTurn && (!BattleInfo.inAnimation || BattleInfo.fungusPlaying))

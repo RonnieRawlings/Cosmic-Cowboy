@@ -12,7 +12,7 @@ public class UIEnemySelect : MonoBehaviour
     private Quaternion initalRot;
 
     // X axis offset.
-    private float xOffset = -0.7f, yOffset = 1, zOffset = 2;
+    private float xOffset = 1.5f, yOffset = 1, zOffset = 3f;
 
     /// <summary> method <c>CallPositionCamBehind</c> allows UI buttons to call the PositionCamBehind method. </summary>
     public void CallPositionCamBehind()
@@ -36,20 +36,21 @@ public class UIEnemySelect : MonoBehaviour
         while (BattleInfo.playerTurn && !InputManager.playerControls.Basic.Escape.WasPressedThisFrame())
         {
             // Calculate the desired camera position
-            Vector3 desiredPosition = BattleInfo.player.transform.position - BattleInfo.player.transform.forward;
+            Vector3 desiredPosition = BattleInfo.player.transform.position - BattleInfo.player.transform.forward * zOffset;
 
-            // Adjust Y height.
-            Vector3 adjustedPos = new Vector3(desiredPosition.x + xOffset, desiredPosition.y + yOffset, desiredPosition.z + zOffset);
+            // Adjust Y height and apply X offset relative to the player's right vector
+            Vector3 adjustedPos = desiredPosition + BattleInfo.player.transform.right * xOffset;
+            adjustedPos.y += yOffset;
 
             // Smoothly move the camera towards the desired position
             transform.position = Vector3.Lerp(transform.position, adjustedPos, Time.deltaTime * 2f);
 
-            // Smoothly move the camera towards the desired position
+            // Smoothly rotate the camera to face the same direction as the player
             float rotationSpeed = 2.0f;
             Quaternion targetRotation = Quaternion.LookRotation(BattleInfo.player.transform.forward, Vector3.up);
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
 
-            // Satisfys return req.
+            // Satisfy return requirement
             yield return null;
         }
 

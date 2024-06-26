@@ -38,9 +38,11 @@ public class EnemiesInRange : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         // Sets ref to cam lock script.
         camLock = Camera.main.GetComponent<CameraLock>();
 
-        // Call camera behind method on UI icon click.
+        // Call camera behind method on UI icon click & rotate player.
         GetComponent<Button>().onClick.AddListener(Camera.main.GetComponent
             <UIEnemySelect>().CallPositionCamBehind);
+        GetComponent<Button>().onClick.AddListener(() => StartCoroutine(BattleInfo.player.
+            GetComponent<PlayerMovement>().RotateTowardsEnemy(assignedEnemy)));
     }
 
     public void OnPointerEnter(PointerEventData eventData)

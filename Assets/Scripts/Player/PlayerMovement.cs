@@ -471,6 +471,36 @@ public class PlayerMovement : MonoBehaviour
         UpdateTurn();
     }
 
+    private bool currentlyRotating = false;
+
+    /// <summary> coroutine <c>RotateTowardsEnemy</c> rotate the player to face the enemy. Usually on enemy select. </summary>
+    /// <param name="enemy">Enemy to face.</param>
+    public IEnumerator RotateTowardsEnemy(GameObject enemy)
+    {
+        // Deals with multiple routines.
+        if (currentlyRotating) { yield break; }
+        currentlyRotating = true;
+
+        // Calculate the direction to the enemy.
+        Vector3 direction = enemy.transform.position - transform.position;
+        direction.y = 0;
+
+        // Calculate the target rotation.
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
+
+        // Rotate the player until it faces the enemy.
+        while (Quaternion.Angle(transform.rotation, targetRotation) > 0.1f)
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 4f);
+            yield return null;
+        }
+
+        // Ensure the final rotation is met.
+        transform.rotation = targetRotation;
+
+        currentlyRotating = false;
+    }
+
     /// <summary> method <c>UpdateTurn</c> checks tiles moved, ends player turn if total move exceeds limit. Continue otherwise. </summary>
     public void UpdateTurn()
     {

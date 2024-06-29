@@ -54,111 +54,14 @@ public class PlayerMovement : MonoBehaviour
 
     #endregion
 
-    /// <summary> method <c>WASDTileMovement</c> allows player to move to surrounding tiles using WASD or Arrow Keys. </summary>
-    public void WASDTileMovement()
-    {
-        // Camera is in comic anim.
-        if (Camera.main.transform.parent == null) { return; }
-
-        // Player can only move on their turn.
-        if (BattleInfo.playerTurn && !BattleInfo.aiTurn)
-        {
-            if (InputManager.playerControls.Movement.SubmitPath.WasPressedThisFrame())
-            {
-                StartCoroutine(MovePlayer(gridManager.GetComponent<GridVisuals>().mouseToPlayer));
-            }
-
-            // If no input received, no movement will occur.
-            int directionIndex = -1;
-
-            // Get the camera's forward and right vectors, ignore Y-axis.
-            Vector3 cameraForward = Vector3.Scale(Camera.main.transform.parent.forward, new Vector3(1, 0, 1)).normalized;
-            Vector3 cameraRight = Vector3.Scale(Camera.main.transform.parent.right, new Vector3(1, 0, 1)).normalized;
-                
-            // Checks for WASD, Arrow Keys, and D-Pad key presses.          
-            if (InputManager.playerControls.Movement.MoveForward.WasPressedThisFrame())
-            {                   
-                directionIndex = GetDirectionIndex(cameraForward);               
-            }            
-            else if (InputManager.playerControls.Movement.MoveLeft.WasPressedThisFrame())                
-            {
-                directionIndex = GetDirectionIndex(-cameraRight);               
-            }               
-            else if (InputManager.playerControls.Movement.MoveRight.WasPressedThisFrame())                
-            {                   
-                directionIndex = GetDirectionIndex(cameraRight);               
-            }              
-            else if (InputManager.playerControls.Movement.MoveBack.WasPressedThisFrame())                
-            {                    
-                directionIndex = GetDirectionIndex(-cameraForward);                
-            }
-
-            // Moves the player if an input has been received.
-            if (directionIndex != -1)
-            {
-                // Actually moves the player.
-                SetPathWASD(directionIndex);
-            }
-        }
-    }
-
-    /// <summary> method <c>GetDirectionIndex</c> returns the direction index based on the camera's orientation. </summary>
-    public int GetDirectionIndex(Vector3 direction)
-    {
-        // Calculate angle between direction and world's forward vector.
-        float angle = Vector3.SignedAngle(direction, Vector3.forward, Vector3.up);
-
-        // Convert angle range from [-180, 180] to [0, 360].
-        if (angle < 0) angle += 360;
-
-        // Return direction index based on angle.
-        if (angle >= 45 && angle < 135) return 1; // Left
-        else if (angle >= 135 && angle < 225) return 3; // Down
-        else if (angle >= 225 && angle < 315) return 7; // Right
-        else return 5; // Up
-    }
-
-    /// <summary> method <c>MovePlayer</c> moves the player to the given node index using neighbouring nodes. </summary>
-    public void SetPathWASD(int directionIndex)
-    {
-        // Creates neighobur list & resets setPath.
-        List<Node> neighbouringNodes;
-        gridManager.GetComponent<GridVisuals>().SetPath = false;
-
-        // Creates list if empty.
-        if (WASDNodeList == null && tilesMoved < BattleValues.playerTileAmount) 
-        { 
-            WASDNodeList = new List<Node>();
-
-            // Finds all neighbouring nodes (3x3 radius).
-            neighbouringNodes = gridManager.FindNeighbourNodesFullList(gridManager.FindNodeFromWorldPoint(transform.position, BattleInfo.currentPlayerGrid), BattleInfo.currentPlayerGrid);
-        }
-        else if (WASDNodeList.Count < BattleValues.playerTileAmount && (tilesMoved + WASDNodeList.Count) < BattleValues.playerTileAmount)
-        {
-            neighbouringNodes = gridManager.FindNeighbourNodesFullList(gridManager.FindNodeFromWorldPoint(
-                gridManager.GetComponent<GridVisuals>().mouseToPlayer[gridManager.GetComponent<GridVisuals>().mouseToPlayer.Count - 1].
-                    WorldPos, BattleInfo.currentPlayerGrid), BattleInfo.currentPlayerGrid);
-        }
-        else
-        {
-            return;
-        }
-
-        // Only adds node if it's walkable, not occupied, & present in the level.
-        if (neighbouringNodes[directionIndex].Walkable && neighbouringNodes[directionIndex].Occupied == null && 
-            BattleInfo.nodeObjects.ContainsKey(neighbouringNodes[directionIndex]))
-        {
-            WASDNodeList.Add(neighbouringNodes[directionIndex]);
-            gridManager.GetComponent<GridVisuals>().mouseToPlayer = WASDNodeList;
-        }
-        else if (WASDNodeList.Count == 0) { WASDNodeList = null; }
-    }
-
     public bool startDragOnPlayer = false;
 
     /// <summary> method <c>MouseTileMovement</c> allows the player to move to surrounding tiles using mouse click/move. </summary>
     public void MouseTileMovement()
     {
+        // Prevents movement in enemySelect.
+        if (BattleInfo.camBehind) { return; }
+
         // If not the player's turn, end method.
         if (!(BattleInfo.playerTurn && !BattleInfo.aiTurn)) 
         {

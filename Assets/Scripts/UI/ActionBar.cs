@@ -28,6 +28,9 @@ public class ActionBar : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
         if (showRangeOnHover && GetComponent<Image>().color.a == 1f)
         {
+            // Don't show range on enemySelect.
+            if (BattleInfo.camBehind) { return; }
+
             BattleInfo.showRange = true;
 
             GridManager gm = BattleInfo.gridManager.GetComponent<GridManager>();
@@ -44,7 +47,7 @@ public class ActionBar : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         GetComponent<Image>().sprite = normalSprite;
         background.SetActive(false);
 
-        if (showRangeOnHover)
+        if (showRangeOnHover && BattleInfo.showRange)
         {
             BattleInfo.showRange = false;
 
@@ -63,7 +66,7 @@ public class ActionBar : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
             GetComponent<Image>().sprite = normalSprite;
             background.SetActive(false);
 
-            if (hasEntered)
+            if (hasEntered && !BattleInfo.camBehind)
             {
                 BattleInfo.showRange = false;
 
@@ -84,7 +87,8 @@ public class ActionBar : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
             if (!resetAfterDisable && showRangeOnHover)
             {
-                resetAfterDisable = true;
+                if (BattleInfo.camBehind) { return; }
+                resetAfterDisable = true;               
                 BattleInfo.showRange = true;
 
                 GridManager gm = BattleInfo.gridManager.GetComponent<GridManager>();

@@ -148,6 +148,9 @@ public class CameraController : MonoBehaviour
     /// <summary> method <c>AdjustRotation</c> allows cam perspective change, 90 degree rotation (Q & E). </summary>
     public IEnumerator AdjustRotation(string keyType)
     {
+        // Prevent rot on enemySelect.
+        if (BattleInfo.camBehind) { yield break; }
+
         camAdjusting = true;
 
         Quaternion targetRotation;

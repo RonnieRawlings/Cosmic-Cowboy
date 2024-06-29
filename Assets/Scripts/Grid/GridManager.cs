@@ -209,11 +209,32 @@ public class GridManager : MonoBehaviour
         return neigbouringNodes;
     }
 
+    // Was cam set behind.
+    private bool camWasBehind = false;
+
     /// <summary> method <c>ChangeGridVisualsEnabledStatus</c> changes the active status of the gridVisuals script on key press. </summary>
     public void ChangeGridVisualsEnabledStatus()
     {
         // Assigns comp to var.
         GridVisuals gridVisuals = GetComponent<GridVisuals>();
+
+        // Grid visual to be disabled upon enemy select.
+        if (BattleInfo.camBehind) 
+        {
+            // Prevents multiple foreach loops.
+            if (camWasBehind) { return; }
+            camWasBehind = true;
+
+            // Disables active nodes.
+            foreach (Node node in gridVisuals.nodesInRange)
+            {
+                BattleInfo.nodeObjects[node].SetActive(false);
+            }
+
+            gridVisuals.enabled = false; 
+            return; 
+        }
+        else { camWasBehind = false; gridVisuals.enabled = true; }
 
         // If a path is being set gridVisuals can't be disabled.
         if (playerIsSettingPath)

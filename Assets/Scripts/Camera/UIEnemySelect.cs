@@ -43,25 +43,21 @@ public class UIEnemySelect : MonoBehaviour
             adjustedPos.y += yOffset;
 
             // Smoothly move the camera towards the desired position
-            transform.position = Vector3.Lerp(transform.position, adjustedPos, Time.deltaTime * 2f);
+            transform.position = Vector3.Lerp(transform.position, adjustedPos, 0.025f);
 
             // Smoothly rotate the camera to face the same direction as the player
-            float rotationSpeed = 2.0f;
             Quaternion targetRotation = Quaternion.LookRotation(BattleInfo.player.transform.forward, Vector3.up);
-            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, 0.025f);
 
             // Satisfy return requirement
             yield return null;
         }
 
-        // Set the duration.
-        float duration = 2f;
-
         while (Vector3.Distance(transform.position, originalPos) >= 0.01f)
         {
             // Interpolate position and rotation
-            transform.position = Vector3.Lerp(transform.position, originalPos, duration * Time.deltaTime);
-            transform.rotation = Quaternion.Lerp(transform.rotation, initalRot, duration * Time.deltaTime);
+            transform.position = Vector3.Lerp(transform.position, originalPos, 0.025f);
+            transform.rotation = Quaternion.Lerp(transform.rotation, initalRot, 0.025f);
 
             // Yield to the next frame
             yield return null;

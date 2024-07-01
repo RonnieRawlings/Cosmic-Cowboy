@@ -42,12 +42,15 @@ public class UIEnemySelect : MonoBehaviour
             Vector3 adjustedPos = desiredPosition + BattleInfo.player.transform.right * xOffset;
             adjustedPos.y += yOffset;
 
+            if (Vector3.Distance(transform.position, adjustedPos) < 0.1f) { BattleInfo.camTransitioning = false; }
+            else { BattleInfo.camTransitioning = true; }
+
             // Smoothly move the camera towards the desired position
-            transform.position = Vector3.Lerp(transform.position, adjustedPos, 0.025f);
+            transform.position = Vector3.Lerp(transform.position, adjustedPos, 0.01f);
 
             // Smoothly rotate the camera to face the same direction as the player
             Quaternion targetRotation = Quaternion.LookRotation(BattleInfo.player.transform.forward, Vector3.up);
-            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, 0.025f);
+            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, 0.01f);
 
             // Satisfy return requirement
             yield return null;

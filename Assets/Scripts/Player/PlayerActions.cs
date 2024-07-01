@@ -74,6 +74,9 @@ public class PlayerActions : MonoBehaviour
         bool canFollowUpShot = BattleInfo.currentAmmo <= player.GetComponentInChildren<WeaponValues>().magSize && 
             BattleInfo.playerTurn && !BattleInfo.inAnimation && hasQuickDrawn;
 
+        // No actions while in cam transition.
+        if (BattleInfo.camTransitioning) { canAttack = false; canEndTurn = false; canReload = false; canFollowUpShot = false; }
+
         // Update attack options
         UpdateActionOptions(0, 3, canAttack);
 

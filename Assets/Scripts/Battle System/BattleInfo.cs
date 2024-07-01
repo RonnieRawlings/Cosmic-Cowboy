@@ -101,6 +101,9 @@ public static class BattleInfo
     // Did the player die this level load.
     public static bool playerDiedThisLoad = false;
 
+    // Used to prevent code when in a camera transition.
+    public static bool camTransitioning = false;
+
     #endregion
 
     #region Scene Obj Refs

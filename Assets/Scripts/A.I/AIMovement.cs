@@ -138,6 +138,9 @@ public class AIMovement : MonoBehaviour
 
         BattleInfo.player.GetComponent<Animator>().SetBool("isHit", false);
 
+        // Update enemies in range.
+        BattleInfo.checkRange.CheckForEnemies();
+
         // Ends this AIs turn.       
         BattleInfo.levelEnemyTurns[gameObject.name] = false;
         BattleInfo.hasLockedEnemy = false;
@@ -262,6 +265,9 @@ public class AIMovement : MonoBehaviour
             // Checks if enemy is in range of player.
             GetComponent<EnemyHoverInfo>().CheckForCompromised();
         }
+
+        // Update enemies in range.
+        BattleInfo.checkRange.CheckForEnemies();
 
         // Waits before ending turn.
         yield return new WaitForSeconds(0.75f);
@@ -455,6 +461,9 @@ public class AIMovement : MonoBehaviour
         }
 
         GetComponent<Animator>().SetBool("isWalking", false);
+
+        // Update enemies in range.
+        BattleInfo.checkRange.CheckForEnemies();
 
         // Waits before ending turn.
         yield return new WaitForSeconds(0.5f);

@@ -41,14 +41,16 @@ public class CheckAIStatus : MonoBehaviour
             {
                 GetComponent<AIMovement>().CurrentNode.Occupied = null;
             }
-            BattleInfo.checkRange.RemoveInRangeIcon(this.gameObject);
-           
+                      
             // Disable components
             GetComponent<AIMovement>().enabled = false;
             GetComponent<EnemyHoverInfo>().enabled = false;
 
             // Remove hoverData entirly.
             Destroy(transform.Find("HoverData").gameObject);
+
+            // Prevent enemy selection.
+            BattleInfo.checkRange.CheckForEnemies();
 
             // Begins enemy death commands.
             StartCoroutine(EnemyDeath());

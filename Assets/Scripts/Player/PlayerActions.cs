@@ -310,6 +310,9 @@ public class PlayerActions : MonoBehaviour
         yield return new WaitForSeconds(0.75f);
         foundEnemy.GetComponent<Animator>().SetBool("isHit", false);
 
+        // Update enemies in range.
+        BattleInfo.checkRange.CheckForEnemies();
+
         // If enemy died, wait extra time.
         if (!BattleInfo.levelEnemies.ContainsKey(foundEnemy))
         {
@@ -420,6 +423,9 @@ public class PlayerActions : MonoBehaviour
         yield return new WaitForSeconds(0.75f);
         foundEnemy.GetComponent<Animator>().SetBool("isHit", false);
 
+        // Update enemies in range.
+        BattleInfo.checkRange.CheckForEnemies();
+
         // If enemy died, wait extra time.
         if (!BattleInfo.levelEnemies.ContainsKey(foundEnemy))
         {
@@ -521,6 +527,9 @@ public class PlayerActions : MonoBehaviour
         yield return new WaitForSeconds(0.75f);
         foundEnemy.GetComponent<Animator>().SetBool("isHit", false);
         player.GetComponent<Animator>().SetBool("isFireing", false);
+
+        // Update enemies in range.
+        BattleInfo.checkRange.CheckForEnemies();
 
         // Reset grid spaces if AP remaining.
         if (BattleInfo.currentActionPoints == 1)

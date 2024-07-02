@@ -52,7 +52,8 @@ public class CheckRange : MonoBehaviour
         List<GameObject> enemiesInRange = new List<GameObject>();
         foreach (Node node in neighbourNodes)
         {
-            if (node.Occupied != null)
+            // Only adds icon if node is occupied & enemy alive.
+            if (node.Occupied != null && BattleInfo.levelEnemies.ContainsKey(node.Occupied))
             {
                 enemiesInRange.Add(node.Occupied);
                 if (!inRangeIcons.ContainsKey(node.Occupied))

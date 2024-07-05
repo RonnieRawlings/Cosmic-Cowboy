@@ -14,12 +14,6 @@ public class UIEnemySelect : MonoBehaviour
     // X axis offset.
     private float xOffset = 1.5f, yOffset = 1, zOffset = 3f;
 
-    /// <summary> method <c>CallPositionCamBehind</c> allows UI buttons to call the PositionCamBehind method. </summary>
-    public void CallPositionCamBehind()
-    {
-        StartCoroutine(PositionCamBehind());
-    }
-
     /// <summary> method <c>PositionCamBehind</c> position the camera behind the player on UI enemy click. </summary>
     public IEnumerator PositionCamBehind()
     {
@@ -72,5 +66,23 @@ public class UIEnemySelect : MonoBehaviour
 
         // Allow cam movement.
         BattleInfo.camBehind = false;
+    }
+
+    // Last selected enemy.
+    private GameObject previousSelected; 
+
+    private void Update()
+    {
+        // If enemy selected, enter enemySelect view.
+        if (BattleInfo.currentSelectedEnemy != previousSelected)
+        {
+            // Position cam behind enemy & face them.
+            StartCoroutine(PositionCamBehind());
+            StartCoroutine(BattleInfo.player.GetComponent<PlayerMovement>().RotateTowardsEnemy
+                (BattleInfo.currentSelectedEnemy));
+
+            // Prevent multiple selections.
+            previousSelected = BattleInfo.currentSelectedEnemy;
+        }
     }
 }

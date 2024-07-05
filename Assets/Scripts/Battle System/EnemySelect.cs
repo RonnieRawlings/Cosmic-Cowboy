@@ -22,17 +22,16 @@ public class EnemySelect : MonoBehaviour
     public void SelectEnemyOnClick()
     {
         // Only functions when LeftClick received.
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        if (Input.GetKeyDown(KeyCode.Mouse0) && !BattleInfo.camBehind && (BattleInfo.playerTurn && !BattleInfo.aiTurn))
         {
             // Sends raycast from mouse to point.
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
 
             // Sets layer mask to Enemy.
             int layerMask = LayerMask.GetMask("Enemy");
 
             // Performs raycast, true if enemy is hit.
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
+            if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, layerMask))
             {
                 // Update enemy selection.
                 BattleInfo.currentSelectedEnemy = hit.transform.gameObject;

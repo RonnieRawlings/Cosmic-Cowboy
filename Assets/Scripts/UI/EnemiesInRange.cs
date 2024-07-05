@@ -32,17 +32,27 @@ public class EnemiesInRange : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         camLock.EnemyLockOn(assignedEnemy.transform);
     }
 
+    /// <summary> method <c>UpdateSelectedEnemy</c> prevents selectedEnemy from becoming incorrect due to hover select. </summary>
+    public void UpdateSelectedEnemy()
+    {
+        BattleInfo.currentSelectedEnemy = assignedEnemy;
+    }
+
     // Called once on script initlisation.
     private void Awake()
     {
         // Sets ref to cam lock script.
         camLock = Camera.main.GetComponent<CameraLock>();
 
-        // Call camera behind method on UI icon click & rotate player.
-        GetComponent<Button>().onClick.AddListener(Camera.main.GetComponent
-            <UIEnemySelect>().CallPositionCamBehind);
-        GetComponent<Button>().onClick.AddListener(() => StartCoroutine(BattleInfo.player.
-            GetComponent<PlayerMovement>().RotateTowardsEnemy(assignedEnemy)));
+        // Gets ref to button.
+        Button buttonRef = GetComponent<Button>();
+
+        // Call camera behind method on UI icon click, rotate player, & set selected.
+        buttonRef.onClick.AddListener(() => StartCoroutine(Camera.main.GetComponent
+            <UIEnemySelect>().PositionCamBehind()));
+        buttonRef.onClick.AddListener(() => StartCoroutine(BattleInfo.player.GetComponent            
+            <PlayerMovement>().RotateTowardsEnemy(assignedEnemy)));
+        buttonRef.onClick.AddListener(UpdateSelectedEnemy);       
     }
 
     public void OnPointerEnter(PointerEventData eventData)

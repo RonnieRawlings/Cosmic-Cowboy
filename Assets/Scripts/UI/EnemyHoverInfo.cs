@@ -32,61 +32,17 @@ public class EnemyHoverInfo : MonoBehaviour
         // Checks if an enemy has been hit by mouse.
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
         {
-            // Gets the EnemyStats and WeaponValues from the hit enemy.
-            EnemyStats enemyStats = hit.transform.GetComponentInChildren<EnemyStats>();
-            WeaponValues weaponValues = hit.transform.GetComponentInChildren<WeaponValues>();
-
             // Only shows the current hovered enemy data.
             if (transform.name == hit.transform.name)
             {
                 // Set materials as outline.
                 meshRend.materials = outlineMaterials;
-
-                // Finds range block parent.
-                GameObject rangeParent = hoverCanvas.transform.Find("DetectionRange").Find("Images").gameObject;
-                int blockRange = enemyStats.DetectionRange;
-
-                // Updates correct detection range.
-                UpdateRange(rangeParent, blockRange);
-
-                // Finds weaponRange parent.
-                rangeParent = hoverCanvas.transform.Find("WeaponRange").Find("Images").gameObject;
-                blockRange = weaponValues.range;
-
-                // Updates correct weapon range.
-                UpdateRange(rangeParent, blockRange);
-
-                // Enables canvas.
-                hoverCanvas.SetActive(true);
             }
         }
         else
         {
             // Sets materials as no outline.
             meshRend.materials = noOutlineMaterials;
-
-            // Disables canvas.
-            hoverCanvas.SetActive(false);
-
-            // Loops through all range UIs.
-            for (int i = 0; i < hoverCanvas.transform.childCount - 1; i++)
-            {
-                // Disables all enabled range blocks.
-                foreach (Transform child in hoverCanvas.transform.GetChild(i).Find("Images"))
-                {
-                    child.gameObject.SetActive(false);
-                }
-            }
-        }
-    }
-
-    /// <summary> method <c>UpdateRange</c> sets the enemies given range in visual blocks. </summary>
-    public void UpdateRange(GameObject blockParent, int blockAmount)
-    {
-        // Enables the amount of blocks nessecary for player range.
-        for (int i = 0; i < blockAmount; i++)
-        {
-            blockParent.transform.GetChild(i).gameObject.SetActive(true);
         }
     }
 
@@ -119,17 +75,14 @@ public class EnemyHoverInfo : MonoBehaviour
         // Prevents further routines.
         compromisedShowing = true;
 
-        // Plays animation.
+        // Plays anim.
         hoverCanvas.SetActive(true);
-        hoverCanvas.transform.GetChild(0).gameObject.SetActive(false);
-        hoverCanvas.transform.GetChild(1).gameObject.SetActive(false);
-        hoverCanvas.transform.GetChild(2).gameObject.SetActive(true);
+        hoverCanvas.transform.GetChild(0).gameObject.SetActive(true);
 
         yield return new WaitForSeconds(1.8f);
-
+            
+        // Stops playing anim.
         hoverCanvas.transform.GetChild(0).gameObject.SetActive(true);
-        hoverCanvas.transform.GetChild(1).gameObject.SetActive(true);               
-        hoverCanvas.transform.GetChild(2).gameObject.SetActive(false);
         hoverCanvas.SetActive(false);
 
         // Allows further routines & hoverData.
@@ -174,6 +127,7 @@ public class EnemyHoverInfo : MonoBehaviour
     // Is the compromised anim playing.
     private bool compromisedShowing = false;
 
+    // Keeps track of last amount of tiles moved by player.
     private int lastTilesMoved;
 
     // Update is called once per frame

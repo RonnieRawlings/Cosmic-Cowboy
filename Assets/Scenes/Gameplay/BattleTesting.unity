@@ -203,6 +203,16 @@ PrefabInstance:
       propertyPath: findPath
       value: 
       objectReference: {fileID: 932108816}
+    - target: {fileID: 5675681894315861525, guid: 6fc8a1734766c7a40af9fcb2fa50903c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6690556914851953565, guid: 6fc8a1734766c7a40af9fcb2fa50903c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8821158436210734289, guid: 6fc8a1734766c7a40af9fcb2fa50903c,
         type: 3}
       propertyPath: m_RootOrder

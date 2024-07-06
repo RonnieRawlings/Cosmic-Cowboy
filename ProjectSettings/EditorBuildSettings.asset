@@ -27,30 +27,21 @@ EditorBuildSettings:
     path: Assets/Scenes/Menus/ThankYou.unity
     guid: 9aee5bba6fd9daf4b8604911ca1b6769
   - enabled: 1
-    path: Assets/Scenes/Menus/Loading Screens/Level 1/LoadingScreen-Cowboy-Level1.unity
-    guid: eab2d6ba1acc73547959de781a9a18ad
-  - enabled: 1
-    path: Assets/Scenes/Menus/Loading Screens/Level 1/LoadingScreen-T.W.I-Level1.unity
-    guid: bf36adda412904a45b4c46782a1b9eb4
-  - enabled: 1
-    path: Assets/Scenes/Menus/Loading Screens/Level 2/LoadingScreen-T.W.I-Level2.unity
-    guid: 1024f5573ce207b47946ade0de5c1df5
-  - enabled: 1
-    path: Assets/Scenes/Menus/Loading Screens/Level 2/LoadingScreen-Cowboy-Level2.unity
-    guid: 264256fb959814f4db841f1f5c74cdfe
-  - enabled: 1
     path: Assets/Scenes/Menus/GameReveal.unity
     guid: f38ee2fc12349ae4f813116558f787ad
   - enabled: 1
     path: Assets/Scenes/Menus/SkillSelect.unity
     guid: 40f936d588c629847bebe0a2e1a68d79
   - enabled: 1
-    path: Assets/Scenes/Menus/Loading Screens/Level 1/LoadingScreen-Tank-Level1.unity
-    guid: 1d1010ccfae2987458f034d1d47b743c
-  - enabled: 1
-    path: Assets/Scenes/Menus/Loading Screens/Level 2/LoadingScreen-Tank-Level2.unity
-    guid: 903a281f976c9f84c821b376f42fee47
-  - enabled: 1
     path: Assets/Scenes/Menus/SkillSelect 2.unity
     guid: f9f34db762667654fb5fe03274fe4691
+  - enabled: 1
+    path: Assets/Scenes/Menus/Loading Screens/Loading1.unity
+    guid: 275effadd9ffe174d9577cce1ae43ebd
+  - enabled: 1
+    path: Assets/Scenes/Menus/Loading Screens/Loading2.unity
+    guid: fa6086083d8997b4a82207de62c2a72d
+  - enabled: 1
+    path: Assets/Scenes/Menus/Loading Screens/Loading3.unity
+    guid: be22a9ba68e60f14c9b9028d9114619d
   m_configObjects: {}

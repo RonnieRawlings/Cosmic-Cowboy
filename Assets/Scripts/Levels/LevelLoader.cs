@@ -1,48 +1,23 @@
+// Author - Jack/Ronnie.
+
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class LevelLoader : MonoBehaviour
 {
-    public void LoadMainMenu()
+    /// <summary> method <c>LoadScene</c> uses SceneManagement to load the given scene. </summary>
+    /// <param name="sceneName">the given scenes name.</param>
+    public void LoadScene(string sceneName)
     {
-        SceneManager.LoadScene(1);
-    }
+        // Loads the given scene.
+        SceneManager.LoadScene(sceneName);
 
-    public void LoadCredits()
-    {
-        SceneManager.LoadScene(2);
-    }
-
-    public void LoadGallery()
-    {
-        SceneManager.LoadScene(3);
-    }
-
-    public void LoadLevel01()
-    {
+        // Resets any level leftovers.
         BattleInfo.ResetLevelInfo();
-        SceneManager.LoadScene(4);
     }
 
-    public void LoadLevel02()
-    {
-        BattleInfo.ResetLevelInfo();
-        SceneManager.LoadScene(5);
-    }
-
-    public void SkillSelect()
-    {
-        BattleInfo.ResetLevelInfo();
-        SceneManager.LoadScene(12);
-    }
-
-    public void ThankYou()
-    {
-        BattleInfo.ResetLevelInfo();
-        SceneManager.LoadScene("ThankYou");
-    }
-
-    public void quitGame()
+    /// <summary> method <c>QuitGame</c> closes the application. Only functional in build. </summary>
+    public void QuitGame()
     {
         Application.Quit();
     }

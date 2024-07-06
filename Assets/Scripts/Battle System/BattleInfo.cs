@@ -17,6 +17,9 @@ public static class BattleInfo
     // All enemies in the level.
     public static List<string> levelEnemiesList;
 
+    // Enemies in player hit range. 
+    public static List<GameObject> enemiesInRange;
+
     // Ref to all levelEnemies stats.
     public static Dictionary<GameObject, EnemyStats> levelEnemyStats;
 
@@ -123,6 +126,7 @@ public static class BattleInfo
     static BattleInfo()
     {       
         levelEnemies = new Dictionary<GameObject, int>();
+        enemiesInRange = new List<GameObject>();
         levelEnemiesList = new List<string>();
         levelEnemyTurns = new SortedDictionary<string, bool>();
         levelEnemyStats = new Dictionary<GameObject, EnemyStats>();
@@ -189,6 +193,7 @@ public static class BattleInfo
         levelEnemies.Clear();        
         levelEnemyTurns.Clear();
         levelEnemyStats.Clear();
+        enemiesInRange.Clear();
 
         nodeObjects.Clear();
 

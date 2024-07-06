@@ -21,16 +21,19 @@ public class CheckRange : MonoBehaviour
 
         // Assign enemy to icon.
         newIcon.GetComponent<EnemiesInRange>().AssignedEnemy = enemy;
+
+        // Allow hoverSelect for the given enemy.
+        BattleInfo.enemiesInRange.Add(enemy);
     }
 
     /// <summary> method <c>RemoveInRangeIcon</c> removes the icon from the scene if enemy no longer in range of player. </summary>
     /// <param name="enemies">List of enemies to remove icons for.</param>
     public void RemoveInRangeIcons(List<GameObject> enemies) 
     {
+        // Loop through all enemies.
         for (int i = 0; i < enemies.Count; i++)
         {
-            Destroy(inRangeIcons[enemies[i]]);
-            inRangeIcons.Remove(enemies[i]);
+            RemoveInRangeIcon(enemies[i]);
         }       
     }
 
@@ -38,8 +41,12 @@ public class CheckRange : MonoBehaviour
     /// <param name="enemy">Enemy accosiated with the icon.</param>
     public void RemoveInRangeIcon(GameObject enemy)
     {
+        // Removes icon & refs.
         Destroy(inRangeIcons[enemy]);
         inRangeIcons.Remove(enemy);
+
+        // Remove enemy from inRange list.
+        BattleInfo.enemiesInRange.Remove(enemy);
     }
 
     public void CheckForEnemies()

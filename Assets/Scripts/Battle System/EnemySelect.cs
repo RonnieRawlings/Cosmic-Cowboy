@@ -23,7 +23,7 @@ public class EnemySelect : MonoBehaviour
     {
         // Only functions when LeftClick received.
         if (Input.GetKeyDown(KeyCode.Mouse0) && !BattleInfo.camBehind && (BattleInfo.playerTurn && !BattleInfo.aiTurn))
-        {
+        {           
             // Sends raycast from mouse to point.
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
@@ -33,6 +33,9 @@ public class EnemySelect : MonoBehaviour
             // Performs raycast, true if enemy is hit.
             if (Physics.Raycast(ray, out RaycastHit hit, Mathf.Infinity, layerMask))
             {
+                // Only enter select if in weapon range.
+                if (!BattleInfo.enemiesInRange.Contains(hit.transform.gameObject)) { return; }
+
                 // Update enemy selection.
                 BattleInfo.currentSelectedEnemy = hit.transform.gameObject;
             }

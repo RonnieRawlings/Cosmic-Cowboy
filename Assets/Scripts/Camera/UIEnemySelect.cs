@@ -64,8 +64,9 @@ public class UIEnemySelect : MonoBehaviour
         transform.position = originalPos;
         transform.rotation = initalRot;
 
-        // Allow cam movement.
+        // Allow cam movement & player actions.
         BattleInfo.camBehind = false;
+        BattleInfo.camTransitioning = false;
     }
 
     // Last selected enemy.

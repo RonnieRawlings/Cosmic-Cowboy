@@ -6,8 +6,14 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 public class EnemiesInRange : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
+    // Different enemy state sprites.
+    [SerializeField] private Sprite unalerted, alerted;
+
     // Enemy assigned to this in range obj.
     private GameObject assignedEnemy;
+
+    // Is the enemy in range of player.
+    private bool inRange;
 
     // CameraLock script reference.
     private CameraLock camLock;
@@ -37,6 +43,17 @@ public class EnemiesInRange : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     {
         BattleInfo.currentSelectedEnemy = assignedEnemy;
     }
+    
+    /// <summary> method <c>SwitchSprite</c> switch the icons sprite depending on inRange value. </summary>
+    public void SwitchSprite()
+    {
+        // Get image comp.
+        Image iconImage = GetComponent<Image>();
+
+        // Switch sprite accordingly.
+        if (inRange) { iconImage.sprite = alerted; }
+        else { iconImage.sprite = unalerted; }
+    }
 
     // Called once on script initlisation.
     private void Awake()
@@ -52,7 +69,7 @@ public class EnemiesInRange : MonoBehaviour, IPointerEnterHandler, IPointerExitH
             <UIEnemySelect>().PositionCamBehind()));
         buttonRef.onClick.AddListener(() => StartCoroutine(BattleInfo.player.GetComponent            
             <PlayerMovement>().RotateTowardsEnemy(assignedEnemy)));
-        buttonRef.onClick.AddListener(UpdateSelectedEnemy);       
+        buttonRef.onClick.AddListener(UpdateSelectedEnemy);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -83,5 +100,17 @@ public class EnemiesInRange : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
         // Return to player lock on.
         BattleInfo.lockOnEnemy = false;
+    }
+
+    // Tracks last value.
+    private bool lastValue = false;
+
+    private void Update()
+    {
+        // Check if in detection range.
+        inRange = assignedEnemy.GetComponent<EnemyHoverInfo>().InRange;
+
+        // Switch sprite if inRange has changed.
+        if (lastValue != inRange) { SwitchSprite(); }
     }
 }

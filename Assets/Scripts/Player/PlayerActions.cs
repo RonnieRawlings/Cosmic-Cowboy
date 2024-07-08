@@ -242,63 +242,10 @@ public class PlayerActions : MonoBehaviour
         gunshotVFX.GetComponent<VisualEffect>().Play();
 
         // Plays shoot SFX.
-        player.GetComponent<AudioSource>().PlayOneShot(playerFire);
+        player.GetComponent<AudioSource>().PlayOneShot(playerFire); 
 
-        // Players attachted attack values.
-        WeaponValues weaponValues = BattleInfo.playerWeapon;
-
-        int baseAccuracy = Mathf.RoundToInt((float)SkillsAndClasses.playerStats["Perception"] / foundEnemy.GetComponentInChildren<EnemyStats>().fitness
-            * weaponValues.baseAccuracy);
-
-        // Only removes health if attack has landed successfully.
-        if (BattleInfo.CalculateAttackChance(baseAccuracy))
-        {
-            // Play enemy hit anim + sfx.
-            foundEnemy.GetComponent<Animator>().SetBool("isHit", true);
-            yield return new WaitForSeconds(0.1f);
-            foundEnemy.GetComponent<AudioSource>().PlayOneShot(enemyHitSFX[Random.Range(0, enemyHitSFX.Count)]);
-
-            // Plays enemy hit VFX.
-            foundEnemy.GetComponentInChildren<VisualEffect>().Play();
-
-            // Sets attackDamage, applies crit multiplyer if successful.
-            int attackDamage = BattleInfo.CalculateDamage(weaponValues.baseDamage, SkillsAndClasses.playerStats["Toughness"], 
-                foundEnemy.GetComponentInChildren<EnemyStats>().toughness);
-
-            // Players chance of landing a crit, based on luck stats.
-            int critChance = Mathf.RoundToInt((float)SkillsAndClasses.playerStats["Luck"] / 
-                foundEnemy.GetComponentInChildren<EnemyStats>().luck * weaponValues.critChance);
-
-            if (BattleInfo.CalculateAttackChance(critChance))
-            {
-                attackDamage = BattleInfo.ApplyCritMultiplyer(attackDamage, weaponValues.critMultiplyer);
-
-                // Applies crit effect on enemy.
-                StartCoroutine(CritEffect(foundEnemy));
-                Debug.Log("Attack Crit!");
-            }
-            else
-            {
-                // Only normal hit, play hit effect.
-                StartCoroutine(HitEffect(foundEnemy));
-            }
-
-            // Attacks the enemy & deincrements ammo.
-            BattleInfo.levelEnemies[foundEnemy] -= attackDamage;
-            --BattleInfo.currentAmmo;
-
-            // Logs to console.
-            Debug.Log("Enemy Found! Attack success, enemy health remaining: " +
-                BattleInfo.levelEnemies[foundEnemy].ToString());
-        }
-        else
-        {
-            // Missed but still remove ammo.
-            --BattleInfo.currentAmmo;
-
-            // Plays miss effect.
-            StartCoroutine(MissEffect(foundEnemy));
-        }
+        // Calc dmg, apply dmg, play effects.
+        yield return StartCoroutine(DamageCalcs(0, 0, foundEnemy));
 
         // Reset closestEnemy.
         BattleInfo.closestEnemy = null;
@@ -360,58 +307,9 @@ public class PlayerActions : MonoBehaviour
         // Plays shoot SFX.
         player.GetComponent<AudioSource>().PlayOneShot(playerFire);
 
-        // Players attachted attack values.
-        WeaponValues weaponValues = BattleInfo.playerWeapon;
-
-        int baseAccuracy = Mathf.RoundToInt((float)SkillsAndClasses.playerStats["Perception"] / foundEnemy.GetComponentInChildren<EnemyStats>().fitness
-            * weaponValues.baseAccuracy);
-
-        // Only removes health if attack has landed successfully.
-        if (BattleInfo.CalculateAttackChance(baseAccuracy + BattleValues.steadyAimHitGain))
-        {
-            // Play enemy hit anim + sfx.
-            foundEnemy.GetComponent<Animator>().SetBool("isHit", true);
-            yield return new WaitForSeconds(0.1f);
-            foundEnemy.GetComponent<AudioSource>().PlayOneShot(enemyHitSFX[Random.Range(0, enemyHitSFX.Count)]);
-
-            // Plays enemy hit VFX.
-            foundEnemy.GetComponentInChildren<VisualEffect>().Play();
-
-            // Sets attackDamage, applies crit multiplyer if successful.
-            int attackDamage = BattleInfo.CalculateDamage(weaponValues.baseDamage, SkillsAndClasses.playerStats["Toughness"],
-                foundEnemy.GetComponentInChildren<EnemyStats>().toughness);
-
-            // Players chance of landing a crit, based on luck stats.
-            int critChance = Mathf.RoundToInt((float)SkillsAndClasses.playerStats["Luck"] /
-                foundEnemy.GetComponentInChildren<EnemyStats>().luck * weaponValues.critChance);
-
-            if (BattleInfo.CalculateAttackChance(critChance + BattleValues.steadyAimCritGain))
-            {
-                attackDamage = BattleInfo.ApplyCritMultiplyer(attackDamage, weaponValues.critMultiplyer);
-                StartCoroutine(CritEffect(foundEnemy));
-            }
-            else
-            {
-                // Only normal hit, play hit effect.
-                StartCoroutine(HitEffect(foundEnemy));
-            }
-
-            // Attacks the enemy & deincrements ammo.
-            BattleInfo.levelEnemies[foundEnemy] -= attackDamage;
-            --BattleInfo.currentAmmo;
-
-            // Logs to console.
-            Debug.Log("Enemy Found! Attack success, enemy health remaining: " +
-                BattleInfo.levelEnemies[foundEnemy].ToString());
-        }
-        else
-        {
-            // Missed but still remove ammo.
-            --BattleInfo.currentAmmo;
-
-            // Plays miss effect.
-            StartCoroutine(MissEffect(foundEnemy));
-        }
+        // Calc dmg, apply dmg, play effects. 
+        yield return StartCoroutine(DamageCalcs(BattleValues.steadyAimHitGain, 
+            BattleValues.steadyAimCritGain, foundEnemy));
 
         // Reset closestEnemy.
         BattleInfo.closestEnemy = null;
@@ -469,56 +367,8 @@ public class PlayerActions : MonoBehaviour
         // Plays quick draw SFX.
         player.GetComponent<AudioSource>().PlayOneShot(playerQuickDraw);
 
-        // Players attachted attack values.
-        WeaponValues weaponValues = BattleInfo.playerWeapon;
-
-        int baseAccuracy = Mathf.RoundToInt((float)SkillsAndClasses.playerStats["Perception"] / foundEnemy.GetComponentInChildren<EnemyStats>().fitness
-            * weaponValues.baseAccuracy);
-
-        // Only removes health if attack has landed successfully.
-        if (BattleInfo.CalculateAttackChance(baseAccuracy - BattleValues.quickDrawHitDecrease))
-        {
-            // Play enemy hit anim + sfx.
-            foundEnemy.GetComponent<Animator>().SetBool("isHit", true);
-            yield return new WaitForSeconds(0.1f);
-            foundEnemy.GetComponent<AudioSource>().PlayOneShot(enemyHitSFX[Random.Range(0, enemyHitSFX.Count)]);
-
-            // Plays enemy hit VFX.
-            foundEnemy.GetComponentInChildren<VisualEffect>().Play();
-
-            // Sets attackDamage, applies crit multiplyer if successful.
-            int attackDamage = BattleInfo.CalculateDamage(weaponValues.baseDamage, SkillsAndClasses.playerStats["Toughness"],
-                foundEnemy.GetComponentInChildren<EnemyStats>().toughness);
-
-            // Players chance of landing a crit, based on luck stats.
-            int critChance = Mathf.RoundToInt((float)SkillsAndClasses.playerStats["Luck"] /
-                foundEnemy.GetComponentInChildren<EnemyStats>().luck * weaponValues.critChance);
-
-            if (BattleInfo.CalculateAttackChance(critChance))
-            {
-                attackDamage = BattleInfo.ApplyCritMultiplyer(attackDamage, weaponValues.critMultiplyer);
-                StartCoroutine(CritEffect(foundEnemy));
-
-                Debug.Log("Attack Crit!");
-            }
-            else
-            {
-                // Only normal hit, play hit effect.
-                StartCoroutine(HitEffect(foundEnemy));
-            }
-
-            // Attacks the enemy & deincrements ammo.
-            BattleInfo.levelEnemies[foundEnemy] -= attackDamage;
-            --BattleInfo.currentAmmo;
-        }
-        else
-        {
-            // Missed but still remove ammo.
-            --BattleInfo.currentAmmo;
-
-            // Plays miss effect.
-            StartCoroutine(MissEffect(foundEnemy));
-        }        
+        // Calc dmg, apply dmg, play effects.
+        yield return StartCoroutine(DamageCalcs(BattleValues.quickDrawHitDecrease, 0, foundEnemy));
 
         // Deincrements AP.
         BattleInfo.currentActionPoints--;
@@ -554,6 +404,73 @@ public class PlayerActions : MonoBehaviour
     {
         // Executes follow up shot attack.
         StartCoroutine(Fire());
+    }
+
+    /// <summary> method <c>CallMelee</c> allows UI buttons to begin the Melee coroutine. </summary>
+    public void CallMelee()
+    {
+        StartCoroutine(Melee());
+    }
+    
+    /// <summary> coroutine <c>Melee</c> allows the player to attack using a kick or fist/knife. Consumes 1 AP. </summary>
+    public IEnumerator Melee()
+    {
+        yield break;
+    }
+
+    /// <summary> coroutine <c>DamageCalcs</c> calculates dmg, begins effect, & applies dmg to enemy. </summary>
+    /// <param name="hitChange">offset from base hit chance.</param>
+    /// <param name="critChange">offset from base crit chance.</param>
+    /// <param name="enemy">enemy to attack.</param>
+    private IEnumerator DamageCalcs(int hitChange, int critChange, GameObject enemy)
+    {
+        // Players attachted attack values.
+        WeaponValues weaponValues = BattleInfo.playerWeapon;
+
+        int baseAccuracy = Mathf.RoundToInt((float)SkillsAndClasses.playerStats["Perception"] / enemy.GetComponentInChildren            
+            <EnemyStats>().fitness * weaponValues.baseAccuracy);
+
+        if (BattleInfo.CalculateAttackChance(baseAccuracy + hitChange))
+        {
+            // Play enemy hit anim + sfx.
+            enemy.GetComponent<Animator>().SetBool("isHit", true);
+            yield return new WaitForSeconds(0.1f);
+            enemy.GetComponent<AudioSource>().PlayOneShot(enemyHitSFX[Random.Range(0, enemyHitSFX.Count)]);
+
+            // Plays enemy hit VFX.
+            enemy.GetComponentInChildren<VisualEffect>().Play();
+
+            // Sets attackDamage, applies crit multiplyer if successful.
+            int attackDamage = BattleInfo.CalculateDamage(weaponValues.baseDamage, SkillsAndClasses.playerStats["Toughness"],
+                enemy.GetComponentInChildren<EnemyStats>().toughness);
+
+            // Players chance of landing a crit, based on luck stats.
+            int critChance = Mathf.RoundToInt((float)SkillsAndClasses.playerStats["Luck"] /
+                enemy.GetComponentInChildren<EnemyStats>().luck * weaponValues.critChance);
+
+            if (BattleInfo.CalculateAttackChance(critChance + critChange))
+            {
+                attackDamage = BattleInfo.ApplyCritMultiplyer(attackDamage, weaponValues.critMultiplyer);
+                StartCoroutine(CritEffect(enemy));
+            }
+            else
+            {
+                // Only normal hit, play hit effect.
+                StartCoroutine(HitEffect(enemy));
+            }
+
+            // Attacks the enemy & deincrements ammo.
+            BattleInfo.levelEnemies[enemy] -= attackDamage;
+            --BattleInfo.currentAmmo;
+        }
+        else
+        {
+            // Missed but still remove ammo.
+            --BattleInfo.currentAmmo;
+
+            // Plays miss effect.
+            StartCoroutine(MissEffect(enemy));
+        }
     }
 
     /// <summary> coroutine <c>CritEffect</c> allows crit effect to play, disables canvas again once finished. </summary>

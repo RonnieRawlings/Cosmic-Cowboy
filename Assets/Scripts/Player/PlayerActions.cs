@@ -18,7 +18,7 @@ public class PlayerActions : MonoBehaviour
     [SerializeField] private GameObject gunshotVFX;
 
     // All player action UI objs.
-    [SerializeField] private List<GameObject> playerActionObjs;
+    [SerializeField] public List<GameObject> playerActionObjs;
 
     // Ref to gird manager script.
     private GridManager gridManager;
@@ -59,6 +59,9 @@ public class PlayerActions : MonoBehaviour
         // Define the conditions for enabling/disabling attack options.
         bool canAttack = BattleInfo.currentAmmo > 0 && !hasQuickDrawn && !BattleInfo.inAnimation && BattleInfo.playerTurn;
 
+        // Define the conditions for enabling melee attacks.
+        bool canMelee = !BattleInfo.inAnimation && BattleInfo.playerTurn && BattleInfo.currentActionPoints > 1;
+
         // Define the conditions for enabling/disabling take cover.
         bool nearCover = gridManager.GetComponent<CoverSystem>().CheckForCover(player.transform);
         if (!nearCover) { BattleInfo.playerInCover = false; }
@@ -75,22 +78,25 @@ public class PlayerActions : MonoBehaviour
             BattleInfo.playerTurn && !BattleInfo.inAnimation && hasQuickDrawn;
 
         // No actions while in cam transition.
-        if (BattleInfo.camTransitioning) { canAttack = false; canEndTurn = false; canReload = false; canFollowUpShot = false; }
+        if (BattleInfo.camTransitioning) { canAttack = false; canEndTurn = false; canReload = false; canFollowUpShot = false; canMelee = false; }
 
         // Update attack options
         UpdateActionOptions(0, 3, canAttack);
 
+        // Update Melee action.
+        UpdateActionOption(3, canMelee);
+
         // Update Take Cover action
-        UpdateActionOption(3, nearCover && !BattleInfo.playerInCover && BattleInfo.playerTurn && !BattleInfo.inAnimation);
+        UpdateActionOption(4, nearCover && !BattleInfo.playerInCover && BattleInfo.playerTurn && !BattleInfo.inAnimation);
 
         // Update End Turn action
-        UpdateActionOption(4, canEndTurn);
+        UpdateActionOption(5, canEndTurn);
 
         // Update Reload action
-        UpdateActionOption(5, canReload);
+        UpdateActionOption(6, canReload);
 
         // Update Follow-Up-Shot action
-        UpdateActionOption(6, canFollowUpShot);
+        UpdateActionOption(7, canFollowUpShot);
     }
 
     /// <summary> method <c>UpdateActionOptions</c> calls UpdateActionOption for all given actions. </summary>
@@ -115,9 +121,13 @@ public class PlayerActions : MonoBehaviour
     /// <summary> method <c>UpdateActionOption</c> changes the active status of the given player action. </summary>
     private void UpdateActionOption(int index, bool condition)
     {
+        // Don't run if button disabled.
+        if (!playerActionObjs[index].activeInHierarchy) { return; }
+        
         // Changes action image transparency.
         Color originalA = playerActionObjs[index].GetComponent<Image>().color;
         originalA.a = condition ? 1.0f : 0.5f;
+        if (playerActionObjs[index].name == "Quick Draw Button" && hasQuickDrawn) { originalA.a = 0.0f; }
         playerActionObjs[index].GetComponent<Image>().color = originalA;
 
         playerActionObjs[index].GetComponent<Button>().enabled = condition;
@@ -131,18 +141,15 @@ public class PlayerActions : MonoBehaviour
     }
 
     /// <summary> method <c>BasicPlayerAttack</c> checks if an enemy is within range, if so returns found enemy Node. </summary>
-    public GameObject BasicPlayerAttackLogic()
+    public GameObject BasicPlayerAttackLogic(int abilityRange)
     {
-        // Players attachted attack values.
-        WeaponValues weaponValues = BattleInfo.playerWeapon;
-
         // Finds neighbouring nodes to player, range based on attachted weapon        
         List<Node> neighbourNodes = gridManager.FindNeighbourNodes(gridManager.FindNodeFromWorldPoint(player.
-            transform.position, BattleInfo.currentPlayerGrid), weaponValues.range, BattleInfo.currentPlayerGrid);
+            transform.position, BattleInfo.currentPlayerGrid), abilityRange, BattleInfo.currentPlayerGrid);
 
         // Finds either enemy in range or selected enemy.
         GameObject foundEnemy = null;
-        if (BattleInfo.currentSelectedEnemy != null && transform.parent.Find("Enemy Select UI").gameObject.activeInHierarchy)
+        if (BattleInfo.currentSelectedEnemy != null)
         {
             // Finds selected enemy, retrieves if in range.            
             foreach (Node node in neighbourNodes)
@@ -221,7 +228,7 @@ public class PlayerActions : MonoBehaviour
     public IEnumerator Fire()
     {
         // Locates enemy, returns if none found.
-        GameObject foundEnemy = BasicPlayerAttackLogic();
+        GameObject foundEnemy = BasicPlayerAttackLogic(BattleInfo.playerWeapon.range);
         if (foundEnemy == null) 
         {
             GameObject.Find("UICanvas").transform.Find("OutOfRange").gameObject.SetActive(true);
@@ -231,8 +238,8 @@ public class PlayerActions : MonoBehaviour
         // Ends playerTurn.
         BattleInfo.playerTurn = false;
 
-        // Rotates player to face enemy.
-        yield return RotateToFaceEnemy(foundEnemy);
+        // Rotates player to face enemy, with adjust.
+        yield return RotateToFaceEnemy(foundEnemy, true);
 
         // Plays PistolIdle anim.
         player.GetComponent<Animator>().SetBool("isFireing", true);
@@ -242,63 +249,10 @@ public class PlayerActions : MonoBehaviour
         gunshotVFX.GetComponent<VisualEffect>().Play();
 
         // Plays shoot SFX.
-        player.GetComponent<AudioSource>().PlayOneShot(playerFire);
+        player.GetComponent<AudioSource>().PlayOneShot(playerFire); 
 
-        // Players attachted attack values.
-        WeaponValues weaponValues = BattleInfo.playerWeapon;
-
-        int baseAccuracy = Mathf.RoundToInt((float)SkillsAndClasses.playerStats["Perception"] / foundEnemy.GetComponentInChildren<EnemyStats>().fitness
-            * weaponValues.baseAccuracy);
-
-        // Only removes health if attack has landed successfully.
-        if (BattleInfo.CalculateAttackChance(baseAccuracy))
-        {
-            // Play enemy hit anim + sfx.
-            foundEnemy.GetComponent<Animator>().SetBool("isHit", true);
-            yield return new WaitForSeconds(0.1f);
-            foundEnemy.GetComponent<AudioSource>().PlayOneShot(enemyHitSFX[Random.Range(0, enemyHitSFX.Count)]);
-
-            // Plays enemy hit VFX.
-            foundEnemy.GetComponentInChildren<VisualEffect>().Play();
-
-            // Sets attackDamage, applies crit multiplyer if successful.
-            int attackDamage = BattleInfo.CalculateDamage(weaponValues.baseDamage, SkillsAndClasses.playerStats["Toughness"], 
-                foundEnemy.GetComponentInChildren<EnemyStats>().toughness);
-
-            // Players chance of landing a crit, based on luck stats.
-            int critChance = Mathf.RoundToInt((float)SkillsAndClasses.playerStats["Luck"] / 
-                foundEnemy.GetComponentInChildren<EnemyStats>().luck * weaponValues.critChance);
-
-            if (BattleInfo.CalculateAttackChance(critChance))
-            {
-                attackDamage = BattleInfo.ApplyCritMultiplyer(attackDamage, weaponValues.critMultiplyer);
-
-                // Applies crit effect on enemy.
-                StartCoroutine(CritEffect(foundEnemy));
-                Debug.Log("Attack Crit!");
-            }
-            else
-            {
-                // Only normal hit, play hit effect.
-                StartCoroutine(HitEffect(foundEnemy));
-            }
-
-            // Attacks the enemy & deincrements ammo.
-            BattleInfo.levelEnemies[foundEnemy] -= attackDamage;
-            --BattleInfo.currentAmmo;
-
-            // Logs to console.
-            Debug.Log("Enemy Found! Attack success, enemy health remaining: " +
-                BattleInfo.levelEnemies[foundEnemy].ToString());
-        }
-        else
-        {
-            // Missed but still remove ammo.
-            --BattleInfo.currentAmmo;
-
-            // Plays miss effect.
-            StartCoroutine(MissEffect(foundEnemy));
-        }
+        // Calc dmg, apply dmg, play effects.
+        yield return StartCoroutine(DamageCalcs(0, 0, foundEnemy));
 
         // Reset closestEnemy.
         BattleInfo.closestEnemy = null;
@@ -333,7 +287,7 @@ public class PlayerActions : MonoBehaviour
     public IEnumerator SteadyAim()
     {       
         // Locates enemy, returns if none found.
-        GameObject foundEnemy = BasicPlayerAttackLogic();
+        GameObject foundEnemy = BasicPlayerAttackLogic(BattleInfo.playerWeapon.range);
         if (foundEnemy == null) 
         {
             GameObject.Find("UICanvas").transform.Find("OutOfRange").gameObject.SetActive(true);
@@ -347,8 +301,8 @@ public class PlayerActions : MonoBehaviour
         // Ends playerTurn.
         BattleInfo.playerTurn = false;
 
-        // Rotates player to face enemy.
-        yield return RotateToFaceEnemy(foundEnemy);
+        // Rotates player to face enemy, with adjust.
+        yield return RotateToFaceEnemy(foundEnemy, true);
 
         // Plays PistolIdle anim.
         player.GetComponent<Animator>().SetBool("isFireing", true);
@@ -360,58 +314,9 @@ public class PlayerActions : MonoBehaviour
         // Plays shoot SFX.
         player.GetComponent<AudioSource>().PlayOneShot(playerFire);
 
-        // Players attachted attack values.
-        WeaponValues weaponValues = BattleInfo.playerWeapon;
-
-        int baseAccuracy = Mathf.RoundToInt((float)SkillsAndClasses.playerStats["Perception"] / foundEnemy.GetComponentInChildren<EnemyStats>().fitness
-            * weaponValues.baseAccuracy);
-
-        // Only removes health if attack has landed successfully.
-        if (BattleInfo.CalculateAttackChance(baseAccuracy + BattleValues.steadyAimHitGain))
-        {
-            // Play enemy hit anim + sfx.
-            foundEnemy.GetComponent<Animator>().SetBool("isHit", true);
-            yield return new WaitForSeconds(0.1f);
-            foundEnemy.GetComponent<AudioSource>().PlayOneShot(enemyHitSFX[Random.Range(0, enemyHitSFX.Count)]);
-
-            // Plays enemy hit VFX.
-            foundEnemy.GetComponentInChildren<VisualEffect>().Play();
-
-            // Sets attackDamage, applies crit multiplyer if successful.
-            int attackDamage = BattleInfo.CalculateDamage(weaponValues.baseDamage, SkillsAndClasses.playerStats["Toughness"],
-                foundEnemy.GetComponentInChildren<EnemyStats>().toughness);
-
-            // Players chance of landing a crit, based on luck stats.
-            int critChance = Mathf.RoundToInt((float)SkillsAndClasses.playerStats["Luck"] /
-                foundEnemy.GetComponentInChildren<EnemyStats>().luck * weaponValues.critChance);
-
-            if (BattleInfo.CalculateAttackChance(critChance + BattleValues.steadyAimCritGain))
-            {
-                attackDamage = BattleInfo.ApplyCritMultiplyer(attackDamage, weaponValues.critMultiplyer);
-                StartCoroutine(CritEffect(foundEnemy));
-            }
-            else
-            {
-                // Only normal hit, play hit effect.
-                StartCoroutine(HitEffect(foundEnemy));
-            }
-
-            // Attacks the enemy & deincrements ammo.
-            BattleInfo.levelEnemies[foundEnemy] -= attackDamage;
-            --BattleInfo.currentAmmo;
-
-            // Logs to console.
-            Debug.Log("Enemy Found! Attack success, enemy health remaining: " +
-                BattleInfo.levelEnemies[foundEnemy].ToString());
-        }
-        else
-        {
-            // Missed but still remove ammo.
-            --BattleInfo.currentAmmo;
-
-            // Plays miss effect.
-            StartCoroutine(MissEffect(foundEnemy));
-        }
+        // Calc dmg, apply dmg, play effects. 
+        yield return StartCoroutine(DamageCalcs(BattleValues.steadyAimHitGain, 
+            BattleValues.steadyAimCritGain, foundEnemy));
 
         // Reset closestEnemy.
         BattleInfo.closestEnemy = null;
@@ -446,7 +351,7 @@ public class PlayerActions : MonoBehaviour
     public IEnumerator QuickDraw()
     {        
         // Locates enemy, returns if none found.
-        GameObject foundEnemy = BasicPlayerAttackLogic();
+        GameObject foundEnemy = BasicPlayerAttackLogic(BattleInfo.playerWeapon.range);
         if (foundEnemy == null) 
         {
             GameObject.Find("UICanvas").transform.Find("OutOfRange").gameObject.SetActive(true);
@@ -456,8 +361,8 @@ public class PlayerActions : MonoBehaviour
         // Ends playerTurn.
         BattleInfo.playerTurn = false;
 
-        // Rotates player to face enemy.
-        yield return RotateToFaceEnemy(foundEnemy);
+        // Rotates player to face enemy, with adjust.
+        yield return RotateToFaceEnemy(foundEnemy, true);
 
         // Plays PistolIdle anim.
         player.GetComponent<Animator>().SetBool("isFireing", true);
@@ -469,56 +374,8 @@ public class PlayerActions : MonoBehaviour
         // Plays quick draw SFX.
         player.GetComponent<AudioSource>().PlayOneShot(playerQuickDraw);
 
-        // Players attachted attack values.
-        WeaponValues weaponValues = BattleInfo.playerWeapon;
-
-        int baseAccuracy = Mathf.RoundToInt((float)SkillsAndClasses.playerStats["Perception"] / foundEnemy.GetComponentInChildren<EnemyStats>().fitness
-            * weaponValues.baseAccuracy);
-
-        // Only removes health if attack has landed successfully.
-        if (BattleInfo.CalculateAttackChance(baseAccuracy - BattleValues.quickDrawHitDecrease))
-        {
-            // Play enemy hit anim + sfx.
-            foundEnemy.GetComponent<Animator>().SetBool("isHit", true);
-            yield return new WaitForSeconds(0.1f);
-            foundEnemy.GetComponent<AudioSource>().PlayOneShot(enemyHitSFX[Random.Range(0, enemyHitSFX.Count)]);
-
-            // Plays enemy hit VFX.
-            foundEnemy.GetComponentInChildren<VisualEffect>().Play();
-
-            // Sets attackDamage, applies crit multiplyer if successful.
-            int attackDamage = BattleInfo.CalculateDamage(weaponValues.baseDamage, SkillsAndClasses.playerStats["Toughness"],
-                foundEnemy.GetComponentInChildren<EnemyStats>().toughness);
-
-            // Players chance of landing a crit, based on luck stats.
-            int critChance = Mathf.RoundToInt((float)SkillsAndClasses.playerStats["Luck"] /
-                foundEnemy.GetComponentInChildren<EnemyStats>().luck * weaponValues.critChance);
-
-            if (BattleInfo.CalculateAttackChance(critChance))
-            {
-                attackDamage = BattleInfo.ApplyCritMultiplyer(attackDamage, weaponValues.critMultiplyer);
-                StartCoroutine(CritEffect(foundEnemy));
-
-                Debug.Log("Attack Crit!");
-            }
-            else
-            {
-                // Only normal hit, play hit effect.
-                StartCoroutine(HitEffect(foundEnemy));
-            }
-
-            // Attacks the enemy & deincrements ammo.
-            BattleInfo.levelEnemies[foundEnemy] -= attackDamage;
-            --BattleInfo.currentAmmo;
-        }
-        else
-        {
-            // Missed but still remove ammo.
-            --BattleInfo.currentAmmo;
-
-            // Plays miss effect.
-            StartCoroutine(MissEffect(foundEnemy));
-        }        
+        // Calc dmg, apply dmg, play effects.
+        yield return StartCoroutine(DamageCalcs(-BattleValues.quickDrawHitDecrease, 0, foundEnemy));
 
         // Deincrements AP.
         BattleInfo.currentActionPoints--;
@@ -534,6 +391,9 @@ public class PlayerActions : MonoBehaviour
         // Reset grid spaces if AP remaining.
         if (BattleInfo.currentActionPoints == 1)
         {
+            // Enables follow up shot.
+            playerActionObjs[playerActionObjs.Count - 1].SetActive(true);
+
             BattleInfo.playerTurn = true;
             player.GetComponent<PlayerMovement>().TilesMoved = 0;
 
@@ -552,8 +412,119 @@ public class PlayerActions : MonoBehaviour
     /// <summary> method <c>FollowUpShot</c> is an aux action open to the player upon QuickDraw usage, simple extra attack. </summary>
     public void FollowUpShot()
     {
+        // Quick draw should reset.
+        hasQuickDrawn = false;
+
         // Executes follow up shot attack.
         StartCoroutine(Fire());
+    }
+
+    /// <summary> method <c>CallMelee</c> allows UI buttons to begin the Melee coroutine. </summary>
+    public void CallMelee()
+    {
+        StartCoroutine(Melee());
+    }
+    
+    /// <summary> coroutine <c>Melee</c> allows the player to attack using a kick or fist/knife. Consumes 1 AP. </summary>
+    public IEnumerator Melee()
+    {
+        // Locates enemy, returns if none found.
+        GameObject foundEnemy = BasicPlayerAttackLogic(1);
+        if (foundEnemy == null)
+        {
+            GameObject.Find("UICanvas").transform.Find("OutOfRange").gameObject.SetActive(true);
+            yield break;
+        }
+
+        // Ends playerTurn.
+        BattleInfo.playerTurn = false;
+
+        // Rotates player to face enemy, no adjust.
+        yield return RotateToFaceEnemy(foundEnemy, false);
+
+        // Plays PistolIdle anim.
+        player.GetComponent<Animator>().SetBool("isMelee", true);
+        yield return new WaitForSeconds(1f);
+
+        // Calc dmg, apply dmg, play effects. 
+        yield return StartCoroutine(DamageCalcs(100, 0, foundEnemy));
+
+        // Reset closestEnemy.
+        BattleInfo.closestEnemy = null;
+
+        // Clears action points.
+        BattleInfo.currentActionPoints = 0;
+
+        // Waits, ends anim.
+        yield return new WaitForSeconds(0.75f);
+        foundEnemy.GetComponent<Animator>().SetBool("isHit", false);
+
+        // Update enemies in range.
+        BattleInfo.checkRange.CheckForEnemies();
+
+        // If enemy died, wait extra time.
+        if (!BattleInfo.levelEnemies.ContainsKey(foundEnemy))
+        {
+            yield return new WaitForSeconds(1.25f);
+        }
+
+        // Ends the players turn.
+        StartCoroutine(EndTurn(0.4f));
+    }
+
+    /// <summary> coroutine <c>DamageCalcs</c> calculates dmg, begins effect, & applies dmg to enemy. </summary>
+    /// <param name="hitChange">offset from base hit chance.</param>
+    /// <param name="critChange">offset from base crit chance.</param>
+    /// <param name="enemy">enemy to attack.</param>
+    private IEnumerator DamageCalcs(int hitChange, int critChange, GameObject enemy)
+    {
+        // Players attachted attack values.
+        WeaponValues weaponValues = BattleInfo.playerWeapon;
+
+        int baseAccuracy = Mathf.RoundToInt((float)SkillsAndClasses.playerStats["Perception"] / enemy.GetComponentInChildren            
+            <EnemyStats>().fitness * weaponValues.baseAccuracy);
+
+        if (BattleInfo.CalculateAttackChance(baseAccuracy + hitChange))
+        {
+            // Play enemy hit anim + sfx.
+            enemy.GetComponent<Animator>().SetBool("isHit", true);
+            yield return new WaitForSeconds(0.1f);
+            enemy.GetComponent<AudioSource>().PlayOneShot(enemyHitSFX[Random.Range(0, enemyHitSFX.Count)]);
+
+            // Plays enemy hit VFX.
+            enemy.GetComponentInChildren<VisualEffect>().Play();
+
+            // Sets attackDamage, applies crit multiplyer if successful.
+            int attackDamage = BattleInfo.CalculateDamage(weaponValues.baseDamage, SkillsAndClasses.playerStats["Toughness"],
+                enemy.GetComponentInChildren<EnemyStats>().toughness);
+
+            // Players chance of landing a crit, based on luck stats.
+            int critChance = Mathf.RoundToInt((float)SkillsAndClasses.playerStats["Luck"] /
+                enemy.GetComponentInChildren<EnemyStats>().luck * weaponValues.critChance);
+
+            if (BattleInfo.CalculateAttackChance(critChance + critChange))
+            {
+                attackDamage = BattleInfo.ApplyCritMultiplyer(attackDamage, weaponValues.critMultiplyer);
+                StartCoroutine(CritEffect(enemy));
+            }
+            else
+            {
+                // Only normal hit, play hit effect.
+                StartCoroutine(HitEffect(enemy));
+            }
+
+            // Attacks the enemy & deincrements ammo.
+            BattleInfo.levelEnemies[enemy] -= attackDamage;
+            --BattleInfo.currentAmmo;
+        }
+        else
+        {
+            // Missed but still remove ammo.
+            --BattleInfo.currentAmmo;
+
+            // Plays miss effect.
+            StartCoroutine(MissEffect(enemy));
+        }
     }
 
     /// <summary> coroutine <c>CritEffect</c> allows crit effect to play, disables canvas again once finished. </summary>
@@ -598,14 +569,14 @@ public class PlayerActions : MonoBehaviour
     }
 
     /// <summary> interface <c>RotateToFaceEnemy</c> rotates the player to face the specified enemy. </summary>
-    public IEnumerator RotateToFaceEnemy(GameObject foundEnemy)
+    public IEnumerator RotateToFaceEnemy(GameObject foundEnemy, bool accountForShooting)
     {
         // Calculate direction & target rot.
         Vector3 direction = (foundEnemy.transform.position - player.transform.position).normalized;
         Quaternion targetRotation = Quaternion.LookRotation(direction);
         
         // Account for the animation direction.
-        targetRotation *= Quaternion.Euler(0, 90, 0);
+        if (accountForShooting) { targetRotation *= Quaternion.Euler(0, 90, 0); }
 
         // Calculate total angle & time for rotation
         float totalAngle = Quaternion.Angle(player.transform.rotation, targetRotation);
@@ -687,6 +658,9 @@ public class PlayerActions : MonoBehaviour
         // Resets quick drawn.
         hasQuickDrawn = false;
 
+        // Disables follow up shot.
+        playerActionObjs[playerActionObjs.Count - 1].SetActive(false);
+
         // Reset moved tiles.
         GameObject.Find("Player").GetComponent<PlayerMovement>().TilesMoved = 0;
 
@@ -698,8 +672,9 @@ public class PlayerActions : MonoBehaviour
             BattleInfo.aiTurn = false;
 
             // Returns player to idle state.
+            player.GetComponent<Animator>().SetBool("isMelee", false);
             player.GetComponent<Animator>().SetBool("isReloading", false);
-            player.GetComponent<Animator>().SetBool("isFireing", false);
+            player.GetComponent<Animator>().SetBool("isFireing", false);            
 
             // Ends the coroutine early.
             yield break;
@@ -715,6 +690,7 @@ public class PlayerActions : MonoBehaviour
         player.GetComponent<AudioSource>().PlayOneShot(endTurn);
 
         // Returns player to idle state.
+        player.GetComponent<Animator>().SetBool("isMelee", false);
         player.GetComponent<Animator>().SetBool("isReloading", false);
         player.GetComponent<Animator>().SetBool("isFireing", false);
 

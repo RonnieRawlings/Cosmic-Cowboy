@@ -59,6 +59,9 @@ public class PlayerActions : MonoBehaviour
         // Define the conditions for enabling/disabling attack options.
         bool canAttack = BattleInfo.currentAmmo > 0 && !hasQuickDrawn && !BattleInfo.inAnimation && BattleInfo.playerTurn;
 
+        // Define the conditions for enabling melee attacks.
+        bool canMelee = !BattleInfo.inAnimation && BattleInfo.playerTurn && BattleInfo.currentActionPoints > 1;
+
         // Define the conditions for enabling/disabling take cover.
         bool nearCover = gridManager.GetComponent<CoverSystem>().CheckForCover(player.transform);
         if (!nearCover) { BattleInfo.playerInCover = false; }
@@ -75,22 +78,25 @@ public class PlayerActions : MonoBehaviour
             BattleInfo.playerTurn && !BattleInfo.inAnimation && hasQuickDrawn;
 
         // No actions while in cam transition.
-        if (BattleInfo.camTransitioning) { canAttack = false; canEndTurn = false; canReload = false; canFollowUpShot = false; }
+        if (BattleInfo.camTransitioning) { canAttack = false; canEndTurn = false; canReload = false; canFollowUpShot = false; canMelee = false; }
 
         // Update attack options
         UpdateActionOptions(0, 3, canAttack);
 
+        // Update Melee action.
+        UpdateActionOption(3, canMelee);
+
         // Update Take Cover action
-        UpdateActionOption(3, nearCover && !BattleInfo.playerInCover && BattleInfo.playerTurn && !BattleInfo.inAnimation);
+        UpdateActionOption(4, nearCover && !BattleInfo.playerInCover && BattleInfo.playerTurn && !BattleInfo.inAnimation);
 
         // Update End Turn action
-        UpdateActionOption(4, canEndTurn);
+        UpdateActionOption(5, canEndTurn);
 
         // Update Reload action
-        UpdateActionOption(5, canReload);
+        UpdateActionOption(6, canReload);
 
         // Update Follow-Up-Shot action
-        UpdateActionOption(6, canFollowUpShot);
+        UpdateActionOption(7, canFollowUpShot);
     }
 
     /// <summary> method <c>UpdateActionOptions</c> calls UpdateActionOption for all given actions. </summary>

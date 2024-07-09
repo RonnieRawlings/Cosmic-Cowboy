@@ -1,9 +1,6 @@
 // Author - Ronnie Rawlings.
 
-using DG.Tweening;
 using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
 public class UIEnemySelect : MonoBehaviour
@@ -50,6 +47,10 @@ public class UIEnemySelect : MonoBehaviour
             yield return null;
         }
 
+        // Reset selected enemy.
+        previousSelected = null;
+        BattleInfo.currentSelectedEnemy = null;
+        
         while (Vector3.Distance(transform.position, originalPos) >= 0.01f)
         {
             // Interpolate position and rotation

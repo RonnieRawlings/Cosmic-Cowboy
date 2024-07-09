@@ -442,8 +442,10 @@ public class PlayerActions : MonoBehaviour
         // Rotates player to face enemy, no adjust.
         yield return RotateToFaceEnemy(foundEnemy, false);
 
-        // Plays PistolIdle anim.
+        // Plays Melee anim.
+        player.GetComponent<Animator>().SetFloat("differentMelees", Random.Range(0, 3));
         player.GetComponent<Animator>().SetBool("isMelee", true);
+        
         yield return new WaitForSeconds(1f);
 
         // Calc dmg, apply dmg, play effects. 

@@ -422,6 +422,10 @@ public class PlayerMovement : MonoBehaviour
             // Resets quickDraw value.
             GameObject.Find("UICanvas").GetComponentInChildren<PlayerActions>().HasQuickDrawn = false;
 
+            // Disables follow up shot.
+            uiCanvas.GetComponentInChildren<PlayerActions>().playerActionObjs[uiCanvas.GetComponentInChildren
+                <PlayerActions>().playerActionObjs.Count - 1].SetActive(false);
+
             if (BattleInfo.levelEnemies.Count == 0)
             {
                 BattleInfo.aiTurn = false;
@@ -459,6 +463,13 @@ public class PlayerMovement : MonoBehaviour
         {
             // Continues turn.
             BattleInfo.playerTurn = true;
+
+            // Resets quickDraw value.
+            GameObject.Find("UICanvas").GetComponentInChildren<PlayerActions>().HasQuickDrawn = false;
+
+            // Disables follow up shot.
+            uiCanvas.GetComponentInChildren<PlayerActions>().playerActionObjs[uiCanvas.GetComponentInChildren
+                <PlayerActions>().playerActionObjs.Count - 1].SetActive(false);
 
             // Keeps movement available.
             if (BattleInfo.levelEnemies.Count == 0)

@@ -18,7 +18,7 @@ public class PlayerActions : MonoBehaviour
     [SerializeField] private GameObject gunshotVFX;
 
     // All player action UI objs.
-    [SerializeField] private List<GameObject> playerActionObjs;
+    [SerializeField] public List<GameObject> playerActionObjs;
 
     // Ref to gird manager script.
     private GridManager gridManager;
@@ -115,9 +115,13 @@ public class PlayerActions : MonoBehaviour
     /// <summary> method <c>UpdateActionOption</c> changes the active status of the given player action. </summary>
     private void UpdateActionOption(int index, bool condition)
     {
+        // Don't run if button disabled.
+        if (!playerActionObjs[index].activeInHierarchy) { return; }
+        
         // Changes action image transparency.
         Color originalA = playerActionObjs[index].GetComponent<Image>().color;
         originalA.a = condition ? 1.0f : 0.5f;
+        if (playerActionObjs[index].name == "Quick Draw Button" && hasQuickDrawn) { originalA.a = 0.0f; }
         playerActionObjs[index].GetComponent<Image>().color = originalA;
 
         playerActionObjs[index].GetComponent<Button>().enabled = condition;
@@ -381,6 +385,9 @@ public class PlayerActions : MonoBehaviour
         // Reset grid spaces if AP remaining.
         if (BattleInfo.currentActionPoints == 1)
         {
+            // Enables follow up shot.
+            playerActionObjs[playerActionObjs.Count - 1].SetActive(true);
+
             BattleInfo.playerTurn = true;
             player.GetComponent<PlayerMovement>().TilesMoved = 0;
 
@@ -399,6 +406,9 @@ public class PlayerActions : MonoBehaviour
     /// <summary> method <c>FollowUpShot</c> is an aux action open to the player upon QuickDraw usage, simple extra attack. </summary>
     public void FollowUpShot()
     {
+        // Quick draw should reset.
+        hasQuickDrawn = false;
+
         // Executes follow up shot attack.
         StartCoroutine(Fire());
     }
@@ -641,6 +651,9 @@ public class PlayerActions : MonoBehaviour
 
         // Resets quick drawn.
         hasQuickDrawn = false;
+
+        // Disables follow up shot.
+        playerActionObjs[playerActionObjs.Count - 1].SetActive(false);
 
         // Reset moved tiles.
         GameObject.Find("Player").GetComponent<PlayerMovement>().TilesMoved = 0;

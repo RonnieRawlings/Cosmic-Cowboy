@@ -131,18 +131,15 @@ public class PlayerActions : MonoBehaviour
     }
 
     /// <summary> method <c>BasicPlayerAttack</c> checks if an enemy is within range, if so returns found enemy Node. </summary>
-    public GameObject BasicPlayerAttackLogic()
+    public GameObject BasicPlayerAttackLogic(int abilityRange)
     {
-        // Players attachted attack values.
-        WeaponValues weaponValues = BattleInfo.playerWeapon;
-
         // Finds neighbouring nodes to player, range based on attachted weapon        
         List<Node> neighbourNodes = gridManager.FindNeighbourNodes(gridManager.FindNodeFromWorldPoint(player.
-            transform.position, BattleInfo.currentPlayerGrid), weaponValues.range, BattleInfo.currentPlayerGrid);
+            transform.position, BattleInfo.currentPlayerGrid), abilityRange, BattleInfo.currentPlayerGrid);
 
         // Finds either enemy in range or selected enemy.
         GameObject foundEnemy = null;
-        if (BattleInfo.currentSelectedEnemy != null && transform.parent.Find("Enemy Select UI").gameObject.activeInHierarchy)
+        if (BattleInfo.currentSelectedEnemy != null)
         {
             // Finds selected enemy, retrieves if in range.            
             foreach (Node node in neighbourNodes)
@@ -221,7 +218,7 @@ public class PlayerActions : MonoBehaviour
     public IEnumerator Fire()
     {
         // Locates enemy, returns if none found.
-        GameObject foundEnemy = BasicPlayerAttackLogic();
+        GameObject foundEnemy = BasicPlayerAttackLogic(BattleInfo.playerWeapon.range);
         if (foundEnemy == null) 
         {
             GameObject.Find("UICanvas").transform.Find("OutOfRange").gameObject.SetActive(true);
@@ -231,8 +228,8 @@ public class PlayerActions : MonoBehaviour
         // Ends playerTurn.
         BattleInfo.playerTurn = false;
 
-        // Rotates player to face enemy.
-        yield return RotateToFaceEnemy(foundEnemy);
+        // Rotates player to face enemy, with adjust.
+        yield return RotateToFaceEnemy(foundEnemy, true);
 
         // Plays PistolIdle anim.
         player.GetComponent<Animator>().SetBool("isFireing", true);
@@ -280,7 +277,7 @@ public class PlayerActions : MonoBehaviour
     public IEnumerator SteadyAim()
     {       
         // Locates enemy, returns if none found.
-        GameObject foundEnemy = BasicPlayerAttackLogic();
+        GameObject foundEnemy = BasicPlayerAttackLogic(BattleInfo.playerWeapon.range);
         if (foundEnemy == null) 
         {
             GameObject.Find("UICanvas").transform.Find("OutOfRange").gameObject.SetActive(true);
@@ -294,8 +291,8 @@ public class PlayerActions : MonoBehaviour
         // Ends playerTurn.
         BattleInfo.playerTurn = false;
 
-        // Rotates player to face enemy.
-        yield return RotateToFaceEnemy(foundEnemy);
+        // Rotates player to face enemy, with adjust.
+        yield return RotateToFaceEnemy(foundEnemy, true);
 
         // Plays PistolIdle anim.
         player.GetComponent<Animator>().SetBool("isFireing", true);
@@ -344,7 +341,7 @@ public class PlayerActions : MonoBehaviour
     public IEnumerator QuickDraw()
     {        
         // Locates enemy, returns if none found.
-        GameObject foundEnemy = BasicPlayerAttackLogic();
+        GameObject foundEnemy = BasicPlayerAttackLogic(BattleInfo.playerWeapon.range);
         if (foundEnemy == null) 
         {
             GameObject.Find("UICanvas").transform.Find("OutOfRange").gameObject.SetActive(true);
@@ -354,8 +351,8 @@ public class PlayerActions : MonoBehaviour
         // Ends playerTurn.
         BattleInfo.playerTurn = false;
 
-        // Rotates player to face enemy.
-        yield return RotateToFaceEnemy(foundEnemy);
+        // Rotates player to face enemy, with adjust.
+        yield return RotateToFaceEnemy(foundEnemy, true);
 
         // Plays PistolIdle anim.
         player.GetComponent<Animator>().SetBool("isFireing", true);
@@ -368,7 +365,7 @@ public class PlayerActions : MonoBehaviour
         player.GetComponent<AudioSource>().PlayOneShot(playerQuickDraw);
 
         // Calc dmg, apply dmg, play effects.
-        yield return StartCoroutine(DamageCalcs(BattleValues.quickDrawHitDecrease, 0, foundEnemy));
+        yield return StartCoroutine(DamageCalcs(-BattleValues.quickDrawHitDecrease, 0, foundEnemy));
 
         // Deincrements AP.
         BattleInfo.currentActionPoints--;
@@ -415,7 +412,48 @@ public class PlayerActions : MonoBehaviour
     /// <summary> coroutine <c>Melee</c> allows the player to attack using a kick or fist/knife. Consumes 1 AP. </summary>
     public IEnumerator Melee()
     {
-        yield break;
+        // Locates enemy, returns if none found.
+        GameObject foundEnemy = BasicPlayerAttackLogic(1);
+        if (foundEnemy == null)
+        {
+            GameObject.Find("UICanvas").transform.Find("OutOfRange").gameObject.SetActive(true);
+            yield break;
+        }
+
+        // Ends playerTurn.
+        BattleInfo.playerTurn = false;
+
+        // Rotates player to face enemy, no adjust.
+        yield return RotateToFaceEnemy(foundEnemy, false);
+
+        // Plays PistolIdle anim.
+        player.GetComponent<Animator>().SetBool("isMelee", true);
+        yield return new WaitForSeconds(1f);
+
+        // Calc dmg, apply dmg, play effects. 
+        yield return StartCoroutine(DamageCalcs(100, 0, foundEnemy));
+
+        // Reset closestEnemy.
+        BattleInfo.closestEnemy = null;
+
+        // Clears action points.
+        BattleInfo.currentActionPoints = 0;
+
+        // Waits, ends anim.
+        yield return new WaitForSeconds(0.75f);
+        foundEnemy.GetComponent<Animator>().SetBool("isHit", false);
+
+        // Update enemies in range.
+        BattleInfo.checkRange.CheckForEnemies();
+
+        // If enemy died, wait extra time.
+        if (!BattleInfo.levelEnemies.ContainsKey(foundEnemy))
+        {
+            yield return new WaitForSeconds(1.25f);
+        }
+
+        // Ends the players turn.
+        StartCoroutine(EndTurn(0.4f));
     }
 
     /// <summary> coroutine <c>DamageCalcs</c> calculates dmg, begins effect, & applies dmg to enemy. </summary>
@@ -515,14 +553,14 @@ public class PlayerActions : MonoBehaviour
     }
 
     /// <summary> interface <c>RotateToFaceEnemy</c> rotates the player to face the specified enemy. </summary>
-    public IEnumerator RotateToFaceEnemy(GameObject foundEnemy)
+    public IEnumerator RotateToFaceEnemy(GameObject foundEnemy, bool accountForShooting)
     {
         // Calculate direction & target rot.
         Vector3 direction = (foundEnemy.transform.position - player.transform.position).normalized;
         Quaternion targetRotation = Quaternion.LookRotation(direction);
         
         // Account for the animation direction.
-        targetRotation *= Quaternion.Euler(0, 90, 0);
+        if (accountForShooting) { targetRotation *= Quaternion.Euler(0, 90, 0); }
 
         // Calculate total angle & time for rotation
         float totalAngle = Quaternion.Angle(player.transform.rotation, targetRotation);
@@ -615,8 +653,9 @@ public class PlayerActions : MonoBehaviour
             BattleInfo.aiTurn = false;
 
             // Returns player to idle state.
+            player.GetComponent<Animator>().SetBool("isMelee", false);
             player.GetComponent<Animator>().SetBool("isReloading", false);
-            player.GetComponent<Animator>().SetBool("isFireing", false);
+            player.GetComponent<Animator>().SetBool("isFireing", false);            
 
             // Ends the coroutine early.
             yield break;
@@ -632,6 +671,7 @@ public class PlayerActions : MonoBehaviour
         player.GetComponent<AudioSource>().PlayOneShot(endTurn);
 
         // Returns player to idle state.
+        player.GetComponent<Animator>().SetBool("isMelee", false);
         player.GetComponent<Animator>().SetBool("isReloading", false);
         player.GetComponent<Animator>().SetBool("isFireing", false);
 

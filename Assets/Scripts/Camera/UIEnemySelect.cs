@@ -73,7 +73,7 @@ public class UIEnemySelect : MonoBehaviour
     // Last selected enemy.
     private GameObject previousSelected; 
 
-    private void Update()
+    private void FixedUpdate()
     {
         // If enemy selected, enter enemySelect view.
         if (BattleInfo.currentSelectedEnemy != previousSelected)

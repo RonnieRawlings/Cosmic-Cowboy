@@ -103,11 +103,7 @@ public class EnemiesInRange : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         selectedIcon = transform.GetChild(transform.childCount - 1).GetComponent<Image>();
 
         // Call camera behind method on UI icon click, rotate player, & set selected.
-        buttonRef.onClick.AddListener(UpdateSelectedEnemy);
-        buttonRef.onClick.AddListener(() => StartCoroutine(Camera.main.GetComponent
-            <UIEnemySelect>().PositionCamBehind()));
-        buttonRef.onClick.AddListener(() => StartCoroutine(BattleInfo.player.GetComponent
-            <PlayerMovement>().RotateTowardsEnemy(assignedEnemy)));        
+        buttonRef.onClick.AddListener(UpdateSelectedEnemy);     
     }
 
     // Tracks last value.

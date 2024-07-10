@@ -112,7 +112,7 @@ public class EnemiesInRange : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     private void Update()
     {
         // Can't select enemy when cam is transitioning.
-        if (BattleInfo.camTransitioning || !BattleInfo.playerTurn) { GetComponent<Button>().interactable = false; }
+        if (BattleInfo.camTransitioning || !BattleInfo.playerTurn || BattleInfo.isPlayerRotating) { GetComponent<Button>().interactable = false; }
         else { GetComponent<Button>().interactable = true; }
 
         // Check if in detection range.

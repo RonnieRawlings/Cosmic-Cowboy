@@ -383,6 +383,7 @@ public class PlayerMovement : MonoBehaviour
         // Deals with multiple routines.
         if (currentlyRotating) { yield break; }
         currentlyRotating = true;
+        BattleInfo.isPlayerRotating = true;
 
         // Calculate the direction to the enemy.
         Vector3 direction = enemy.transform.position - transform.position;
@@ -402,6 +403,7 @@ public class PlayerMovement : MonoBehaviour
         transform.rotation = targetRotation;
 
         currentlyRotating = false;
+        BattleInfo.isPlayerRotating = false;
     }
 
     /// <summary> method <c>UpdateTurn</c> checks tiles moved, ends player turn if total move exceeds limit. Continue otherwise. </summary>

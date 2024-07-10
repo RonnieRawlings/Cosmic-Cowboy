@@ -235,6 +235,16 @@ public class PlayerActions : MonoBehaviour
             yield break; 
         }
 
+        // When cam isn't behind enter enemySelect view.
+        if (!BattleInfo.camBehind)
+        {
+            // Assigns closest enemy, enter enemySelect view.
+            BattleInfo.currentSelectedEnemy = foundEnemy;
+
+            // Exits routine early.
+            yield break;
+        }
+
         // Ends playerTurn.
         BattleInfo.playerTurn = false;
 
@@ -292,6 +302,16 @@ public class PlayerActions : MonoBehaviour
         {
             GameObject.Find("UICanvas").transform.Find("OutOfRange").gameObject.SetActive(true);
             yield break; 
+        }
+
+        // When cam isn't behind enter enemySelect view.
+        if (!BattleInfo.camBehind)
+        {
+            // Assigns closest enemy, enter enemySelect view.
+            BattleInfo.currentSelectedEnemy = foundEnemy;
+
+            // Exits routine early.
+            yield break;
         }
 
         // Prevents use of SteadyAim, begins cooldown.

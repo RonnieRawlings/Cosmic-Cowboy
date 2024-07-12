@@ -225,13 +225,17 @@ public class GridManager : MonoBehaviour
             if (camWasBehind) { return; }
             camWasBehind = true;
 
-            // Disables active nodes.
+            // Remove inRange nodes.
+            BattleInfo.showRange = false;
+            gridVisuals.VisualizeGridWhenCreated(true);
+
+            // Disables active nodes.            
             foreach (Node node in gridVisuals.nodesInRange)
             {
                 BattleInfo.nodeObjects[node].SetActive(false);
             }
 
-            gridVisuals.enabled = false; 
+            gridVisuals.enabled = false;
             return; 
         }
         else { camWasBehind = false; gridVisuals.enabled = true; }

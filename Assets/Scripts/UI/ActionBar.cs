@@ -64,6 +64,7 @@ public class ActionBar : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         if (showRangeOnHover && BattleInfo.showRange)
         {
             BattleInfo.showRange = false;
+            if (BattleInfo.camBehind) { return; }
 
             GridVisuals gv = BattleInfo.gridManager.GetComponent<GridVisuals>();
             gv.VisualizeGridWhenCreated(true);

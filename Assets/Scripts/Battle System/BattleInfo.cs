@@ -105,7 +105,7 @@ public static class BattleInfo
     public static bool playerDiedThisLoad = false;
 
     // Used to prevent code when in a camera transition.
-    public static bool camTransitioning = false;
+    public static bool camTransitioning = false, isPlayerRotating = false;
 
     #endregion
 
@@ -188,6 +188,8 @@ public static class BattleInfo
         gamePaused = false;
         lockOnEnemy = false;
         camBehind = false;
+        isPlayerRotating = false;
+        camTransitioning = false;
 
         levelEnemiesList.Clear();
         levelEnemies.Clear();        

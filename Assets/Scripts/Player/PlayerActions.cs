@@ -235,6 +235,16 @@ public class PlayerActions : MonoBehaviour
             yield break; 
         }
 
+        // When cam isn't behind enter enemySelect view.
+        if (!BattleInfo.camBehind)
+        {
+            // Assigns closest enemy, enter enemySelect view.
+            BattleInfo.currentSelectedEnemy = foundEnemy;
+
+            // Exits routine early.
+            yield break;
+        }
+
         // Ends playerTurn.
         BattleInfo.playerTurn = false;
 
@@ -292,6 +302,16 @@ public class PlayerActions : MonoBehaviour
         {
             GameObject.Find("UICanvas").transform.Find("OutOfRange").gameObject.SetActive(true);
             yield break; 
+        }
+
+        // When cam isn't behind enter enemySelect view.
+        if (!BattleInfo.camBehind)
+        {
+            // Assigns closest enemy, enter enemySelect view.
+            BattleInfo.currentSelectedEnemy = foundEnemy;
+
+            // Exits routine early.
+            yield break;
         }
 
         // Prevents use of SteadyAim, begins cooldown.
@@ -358,6 +378,16 @@ public class PlayerActions : MonoBehaviour
             yield break; 
         }
 
+        // When cam isn't behind enter enemySelect view.
+        if (!BattleInfo.camBehind)
+        {
+            // Assigns closest enemy, enter enemySelect view.
+            BattleInfo.currentSelectedEnemy = foundEnemy;
+
+            // Exits routine early.
+            yield break;
+        }
+
         // Ends playerTurn.
         BattleInfo.playerTurn = false;
 
@@ -409,14 +439,81 @@ public class PlayerActions : MonoBehaviour
         }       
     }
 
-    /// <summary> method <c>FollowUpShot</c> is an aux action open to the player upon QuickDraw usage, simple extra attack. </summary>
-    public void FollowUpShot()
+    /// <summary> method <c>FollowUpShot</c>  </summary>
+    public void CallFollowUpShot()
+    {       
+        // Executes follow up shot attack.
+        StartCoroutine(FollowUpShot());
+    }
+
+    /// <summary> coroutine <c>FollowUpShot</c> is an aux action open to the player upon QuickDraw usage, simple extra attack. </summary>
+    public IEnumerator FollowUpShot()
     {
+        // Locates enemy, returns if none found.
+        GameObject foundEnemy = BasicPlayerAttackLogic(BattleInfo.playerWeapon.range);
+        if (foundEnemy == null)
+        {
+            GameObject.Find("UICanvas").transform.Find("OutOfRange").gameObject.SetActive(true);
+            yield break;
+        }
+
+        // When cam isn't behind enter enemySelect view.
+        if (!BattleInfo.camBehind)
+        {
+            // Assigns closest enemy, enter enemySelect view.
+            BattleInfo.currentSelectedEnemy = foundEnemy;
+
+            // Exits routine early.
+            yield break;
+        }
+
+        // Switches back to QuickDraw.
+        this.transform.Find("Follow Up Shot Background").gameObject.SetActive(false);
+        playerActionObjs[playerActionObjs.Count - 1].SetActive(false);
+
         // Quick draw should reset.
         hasQuickDrawn = false;
 
-        // Executes follow up shot attack.
-        StartCoroutine(Fire());
+        // Ends playerTurn.
+        BattleInfo.playerTurn = false;
+
+        // Rotates player to face enemy, with adjust.
+        yield return RotateToFaceEnemy(foundEnemy, true);
+
+        // Plays PistolIdle anim.
+        player.GetComponent<Animator>().SetBool("isFireing", true);
+        yield return new WaitForSeconds(1.6f);
+
+        // Player gunshot VFX.
+        gunshotVFX.GetComponent<VisualEffect>().Play();
+
+        // Plays shoot SFX.
+        player.GetComponent<AudioSource>().PlayOneShot(playerFire);
+
+        // Calc dmg, apply dmg, play effects.
+        yield return StartCoroutine(DamageCalcs(-BattleValues.quickDrawHitDecrease, 0, foundEnemy));
+
+        // Reset closestEnemy.
+        BattleInfo.closestEnemy = null;
+
+        // Clears action points.        
+        BattleInfo.currentActionPoints = 0;
+
+        // Waits, ends anim.
+        yield return new WaitForSeconds(0.75f);
+        foundEnemy.GetComponent<Animator>().SetBool("isHit", false);
+
+        // Update enemies in range.
+        BattleInfo.checkRange.CheckForEnemies();
+
+        // If enemy died, wait extra time.
+        if (!BattleInfo.levelEnemies.ContainsKey(foundEnemy))
+        {
+            yield return new WaitForSeconds(1.25f);
+        }
+
+        // Ends the players turn.
+        StartCoroutine(EndTurn(0.4f));
     }
 
     /// <summary> method <c>CallMelee</c> allows UI buttons to begin the Melee coroutine. </summary>
@@ -436,14 +533,26 @@ public class PlayerActions : MonoBehaviour
             yield break;
         }
 
+        // When cam isn't behind enter enemySelect view.
+        if (!BattleInfo.camBehind)
+        {
+            // Assigns closest enemy, enter enemySelect view.
+            BattleInfo.currentSelectedEnemy = foundEnemy;
+
+            // Exits routine early.
+            yield break;
+        }
+
         // Ends playerTurn.
         BattleInfo.playerTurn = false;
 
         // Rotates player to face enemy, no adjust.
         yield return RotateToFaceEnemy(foundEnemy, false);
 
-        // Plays PistolIdle anim.
+        // Plays Melee anim.
+        player.GetComponent<Animator>().SetFloat("differentMelees", Random.Range(0, 3));
         player.GetComponent<Animator>().SetBool("isMelee", true);
+        
         yield return new WaitForSeconds(1f);
 
         // Calc dmg, apply dmg, play effects. 

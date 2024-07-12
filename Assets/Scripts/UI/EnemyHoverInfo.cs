@@ -19,6 +19,18 @@ public class EnemyHoverInfo : MonoBehaviour
     Material[] outlineMaterials;
     Material[] noOutlineMaterials;
 
+    // Is the player in the detection range.
+    private bool inRange = false;
+
+    #region Properties
+
+    public bool InRange
+    {
+        get { return inRange; }
+    }
+
+    #endregion
+
     /// <summary> method <c>ShowHoverData</c> enables the hoverData canvas if player is hovered over. </summary>
     public void ShowHoverData()
     {
@@ -60,7 +72,8 @@ public class EnemyHoverInfo : MonoBehaviour
             BattleInfo.player.transform.position, GetComponent<AIMovement>().CurrentGrid);
 
         // Player has left the detection range.
-        if (nodePath.Count > BattleInfo.levelEnemyStats[gameObject].DetectionRange) { compromisedShown = false; }
+        if (nodePath.Count > BattleInfo.levelEnemyStats[gameObject].DetectionRange) { compromisedShown = false; inRange = false; }
+        else { inRange = true; }
 
         // Plays compromised if player is within detection range.
         if (nodePath.Count <= BattleInfo.levelEnemyStats[gameObject].DetectionRange && !compromisedShown)
@@ -88,6 +101,14 @@ public class EnemyHoverInfo : MonoBehaviour
         // Allows further routines & hoverData.
         compromisedShown = true;
         compromisedShowing = false;        
+    }
+
+    /// <summary> coroutine <c>StartingCompromised</c> makes sure gird is set-up before checking for first compromised. </summary>
+    private IEnumerator StartingCompromised()
+    {
+        // Wait for grid set-up.
+        yield return new WaitForSeconds(0.1f);
+        CheckForCompromised();
     }
 
     // Called once when active & enabled.
@@ -119,6 +140,9 @@ public class EnemyHoverInfo : MonoBehaviour
 
             Destroy(this);            
         }
+
+        // Check starting position, if in range showcase.
+        StartCoroutine(StartingCompromised());
     }
 
     // Store the last mouse position

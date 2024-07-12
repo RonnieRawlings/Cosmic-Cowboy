@@ -1,9 +1,6 @@
 // Author - Ronnie Rawlings.
 
-using DG.Tweening;
 using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
 public class UIEnemySelect : MonoBehaviour
@@ -13,6 +10,7 @@ public class UIEnemySelect : MonoBehaviour
 
     // X axis offset.
     private float xOffset = 1.5f, yOffset = 1, zOffset = 3f;
+    private float transitionDuration = 2f;
 
     /// <summary> method <c>PositionCamBehind</c> position the camera behind the player on UI enemy click. </summary>
     public IEnumerator PositionCamBehind()
@@ -25,10 +23,17 @@ public class UIEnemySelect : MonoBehaviour
 
         // Access start pos/rot.
         Vector3 originalPos = transform.position;
-        initalRot = transform.rotation;
+        Quaternion initialRot = transform.rotation;
+
+        float elapsedTime = 0f;
+        Vector3 startPos = transform.position;
+        Quaternion startRot = transform.rotation;
 
         while (BattleInfo.playerTurn && !InputManager.playerControls.Basic.Escape.WasPressedThisFrame())
         {
+            BattleInfo.camTransitioning = true;
+            elapsedTime += Time.deltaTime;
+
             // Calculate the desired camera position
             Vector3 desiredPosition = BattleInfo.player.transform.position - BattleInfo.player.transform.forward * zOffset;
 
@@ -36,25 +41,43 @@ public class UIEnemySelect : MonoBehaviour
             Vector3 adjustedPos = desiredPosition + BattleInfo.player.transform.right * xOffset;
             adjustedPos.y += yOffset;
 
-            if (Vector3.Distance(transform.position, adjustedPos) < 0.1f) { BattleInfo.camTransitioning = false; }
-            else { BattleInfo.camTransitioning = true; }
+            if (elapsedTime < transitionDuration)
+            {
+                // Smoothly move the camera towards the desired position
+                transform.position = Vector3.Lerp(startPos, adjustedPos, elapsedTime / transitionDuration);
 
-            // Smoothly move the camera towards the desired position
-            transform.position = Vector3.Lerp(transform.position, adjustedPos, 0.01f);
+                // Smoothly rotate the camera to face the same direction as the player
+                Quaternion targetRotation = Quaternion.LookRotation(BattleInfo.player.transform.forward, Vector3.up);
+                transform.rotation = Quaternion.Lerp(startRot, targetRotation, elapsedTime / transitionDuration);              
+            }
+            else
+            {
+                // Ensure final position and rotation match the target
+                transform.position = adjustedPos;
+                transform.rotation = Quaternion.LookRotation(BattleInfo.player.transform.forward, Vector3.up);
 
-            // Smoothly rotate the camera to face the same direction as the player
-            Quaternion targetRotation = Quaternion.LookRotation(BattleInfo.player.transform.forward, Vector3.up);
-            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, 0.01f);
+                BattleInfo.camTransitioning = false;
+            }
 
             // Satisfy return requirement
             yield return null;
         }
 
-        while (Vector3.Distance(transform.position, originalPos) >= 0.01f)
+        // Reset selected enemy.
+        previousSelected = null;
+        BattleInfo.currentSelectedEnemy = null;
+
+        elapsedTime = 0f;
+        startPos = transform.position;
+        startRot = transform.rotation;
+
+        while (elapsedTime < transitionDuration)
         {
-            // Interpolate position and rotation
-            transform.position = Vector3.Lerp(transform.position, originalPos, 0.025f);
-            transform.rotation = Quaternion.Lerp(transform.rotation, initalRot, 0.025f);
+            elapsedTime += Time.deltaTime;
+
+            // Interpolate position and rotation back to the original
+            transform.position = Vector3.Lerp(startPos, originalPos, elapsedTime / transitionDuration);
+            transform.rotation = Quaternion.Lerp(startRot, initialRot, elapsedTime / transitionDuration);
 
             // Yield to the next frame
             yield return null;
@@ -62,7 +85,7 @@ public class UIEnemySelect : MonoBehaviour
 
         // Ensure final position and rotation match the target
         transform.position = originalPos;
-        transform.rotation = initalRot;
+        transform.rotation = initialRot;
 
         // Allow cam movement & player actions.
         BattleInfo.camBehind = false;
@@ -72,7 +95,7 @@ public class UIEnemySelect : MonoBehaviour
     // Last selected enemy.
     private GameObject previousSelected; 
 
-    private void Update()
+    private void FixedUpdate()
     {
         // If enemy selected, enter enemySelect view.
         if (BattleInfo.currentSelectedEnemy != previousSelected)

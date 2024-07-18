@@ -2,6 +2,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
 public class ObjectFade : MonoBehaviour
@@ -64,6 +65,8 @@ public class ObjectFade : MonoBehaviour
             elapsedTime += Time.deltaTime;
             yield return null;
         }
+
+        _renderer.enabled = false;
     }
 
     /// <summary> method <c>ResetFade</c> returns obj alpha back to originalOpacity over fadeSpeed. </summary>
@@ -71,7 +74,7 @@ public class ObjectFade : MonoBehaviour
     {
         // Allow another fade.
         hasFaded = false;
-
+        
         Material[] newMaterials = new Material[originalMaterials.Count];
 
         for (int i = 0; i < originalMaterials.Count; i++)
@@ -86,15 +89,28 @@ public class ObjectFade : MonoBehaviour
         // Yield return null will wait until the next frame to continue executing the code
         yield return null;
 
-        _renderer.materials = newMaterials;
+        _renderer.materials = newMaterials;        
+    } 
+
+    void Awake()
+    {
+        // Remove comp if no renderer found.
+        if (GetComponent<Renderer>() == null) { Destroy(this); }
+
+        // Obj mesh rend comp.
+        _renderer = GetComponent<Renderer>();
+
+        // Set fadeOut mat.
+        litReplacement = Resources.Load("Materials/fadeOut") as Material;     
+
+        // Set fade values.
+        fadeSpeed = 0.5f;
+        fadeAmount = 0.0f;
     }
 
     // Start is called before the first frame update
     void Start()
-    {
-        // Obj mesh rend comp.
-        _renderer = GetComponent<Renderer>();
-
+    {       
         // Adds all obj materials to list.
         _material = new List<Material>();
         _material.AddRange(_renderer.materials);
@@ -121,5 +137,8 @@ public class ObjectFade : MonoBehaviour
         {
             StartCoroutine(ResetFade());
         }
+
+        // Prevents renderer disabled issues.
+        if (!doFade) { _renderer.enabled = true; }
     }
 }

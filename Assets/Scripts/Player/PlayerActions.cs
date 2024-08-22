@@ -4,11 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http.Headers;
-using TMPro;
 using UnityEngine;
-using UnityEngine.Assertions.Must;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.VFX;
 using Random = UnityEngine.Random;
@@ -57,25 +53,25 @@ public class PlayerActions : MonoBehaviour
     public void UpdateButtonInteraction()
     {
         // Define the conditions for enabling/disabling attack options.
-        bool canAttack = BattleInfo.currentAmmo > 0 && !hasQuickDrawn && !BattleInfo.inAnimation && BattleInfo.playerTurn;
+        bool canAttack = BattleInfo.currentAmmo > 0 && !hasQuickDrawn && !BattleInfo.inAnimation && BattleInfo.playerTurn && !BattleInfo.isPlayerRotating;
 
         // Define the conditions for enabling melee attacks.
-        bool canMelee = !BattleInfo.inAnimation && BattleInfo.playerTurn && BattleInfo.currentActionPoints > 1;
+        bool canMelee = !BattleInfo.inAnimation && BattleInfo.playerTurn && BattleInfo.currentActionPoints > 1 && !BattleInfo.isPlayerRotating;
 
         // Define the conditions for enabling/disabling take cover.
         bool nearCover = gridManager.GetComponent<CoverSystem>().CheckForCover(player.transform);
         if (!nearCover) { BattleInfo.playerInCover = false; }
 
         // Define the conditions for enabling/disabling end turn.
-        bool canEndTurn = BattleInfo.playerTurn && !BattleInfo.aiTurn && !BattleInfo.inAnimation;
+        bool canEndTurn = BattleInfo.playerTurn && !BattleInfo.aiTurn && !BattleInfo.inAnimation && !BattleInfo.isPlayerRotating;
 
         // Define the conditions for enabling/disabling reload.
         bool canReload = BattleInfo.currentAmmo < player.GetComponentInChildren<WeaponValues>().magSize && BattleInfo.playerTurn && 
-            !BattleInfo.inAnimation;
+            !BattleInfo.inAnimation && !BattleInfo.isPlayerRotating;
 
         // Define the conditions for enabling/disabling Follow-Up-Shot.
         bool canFollowUpShot = BattleInfo.currentAmmo <= player.GetComponentInChildren<WeaponValues>().magSize && 
-            BattleInfo.playerTurn && !BattleInfo.inAnimation && hasQuickDrawn;
+            BattleInfo.playerTurn && !BattleInfo.inAnimation && hasQuickDrawn && !BattleInfo.isPlayerRotating;
 
         // No actions while in cam transition.
         if (BattleInfo.camTransitioning) { canAttack = false; canEndTurn = false; canReload = false; canFollowUpShot = false; canMelee = false; }

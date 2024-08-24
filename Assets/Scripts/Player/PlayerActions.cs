@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.VFX;
@@ -753,6 +754,9 @@ public class PlayerActions : MonoBehaviour
         // Ends players turn.
         BattleInfo.playerTurn = false;
         BattleInfo.currentActionPoints = 0;
+
+        // Disables health station interact text.
+        transform.parent.Find("HealthInteract").GetComponent<TextMeshProUGUI>().enabled = false;
 
         // Delay between turns.
         yield return new WaitForSeconds(delay);

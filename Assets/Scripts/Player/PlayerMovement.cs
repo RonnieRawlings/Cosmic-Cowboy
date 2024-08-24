@@ -262,6 +262,11 @@ public class PlayerMovement : MonoBehaviour
         // Update enemies in range.
         BattleInfo.checkRange.CheckForEnemies();
 
+        // Enables click text for health station node.
+        TextMeshProUGUI interactText = uiCanvas.transform.Find("HealthInteract").GetComponent<TextMeshProUGUI>();
+        if (bestPath[bestPath.Count - 1].IsHealthStation) { interactText.enabled = true; }
+        else { interactText.enabled = false; }
+
         // Waits before changing turns.
         yield return new WaitForSeconds(0.75f);
 
@@ -416,6 +421,9 @@ public class PlayerMovement : MonoBehaviour
             BattleInfo.currentActionPoints--;
 
             BattleInfo.closestEnemy = null;
+
+            // Disables health station interact text.
+            uiCanvas.transform.Find("HealthInteract").GetComponent<TextMeshProUGUI>().enabled = false;
 
             // Changes turn.        
             BattleInfo.aiTurn = true;

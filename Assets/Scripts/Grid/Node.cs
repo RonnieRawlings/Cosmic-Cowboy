@@ -1,14 +1,15 @@
 // Author - Ronnie Rawlings.
 
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Node
 {
     // Is this node walkable.
     private bool walkable;
+
+    // Is this node a health station.
+    private bool healthStation;
 
     // LadderNode data.
     private Tuple<bool, Tuple<int, GameObject>> ladderNode;
@@ -86,6 +87,11 @@ public class Node
         get { return ladderNode.Item1; }
     }
 
+    public bool IsHealthStation
+    {
+        get { return healthStation; }
+    }
+
     public int HomeGrid
     {
         get { return ladderNode.Item2.Item1; }
@@ -99,7 +105,7 @@ public class Node
     #endregion
 
     /// <summary> constructor <c>Node</c> assigns values on script initlization. </summary>
-    public Node(bool _walkable, Vector3 _worldPos, int _indexX, int _indexY, Tuple<bool, Tuple<int, GameObject>> _ladderNode)
+    public Node(bool _walkable, Vector3 _worldPos, int _indexX, int _indexY, Tuple<bool, Tuple<int, GameObject>> _ladderNode, bool _healthStation)
     {
         // Is node walkable & world position.
         walkable = _walkable;
@@ -111,5 +117,8 @@ public class Node
 
         // Is this grid space a ladder node.
         ladderNode = _ladderNode;
+
+        // Is this grid space a health station.
+        healthStation = _healthStation;
     }
 }

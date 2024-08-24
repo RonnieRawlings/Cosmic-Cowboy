@@ -257,6 +257,10 @@ public class GridVisuals : MonoBehaviour
                     {
                         existingRenderer.material.color = new Color(1, 0.5f, 0, alpha);
                     }
+                    else if (n.IsHealthStation)
+                    {
+                        existingRenderer.material.color = new Color(0, 1, 0, alpha);
+                    }
                     else
                     {
                         // Sets walkable colour, yellow if 1 AP remaining.

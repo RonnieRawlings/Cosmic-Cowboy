@@ -11,6 +11,8 @@ public class Node
     // Is this node a health station.
     private bool healthStation;
 
+    private GameObject healthStationObj;
+
     // LadderNode data.
     private Tuple<bool, Tuple<int, GameObject>> ladderNode;
 
@@ -92,6 +94,11 @@ public class Node
         get { return healthStation; }
     }
 
+    public GameObject HealthStationObj
+    {
+        get { return healthStationObj; }
+    }
+
     public int HomeGrid
     {
         get { return ladderNode.Item2.Item1; }
@@ -105,7 +112,7 @@ public class Node
     #endregion
 
     /// <summary> constructor <c>Node</c> assigns values on script initlization. </summary>
-    public Node(bool _walkable, Vector3 _worldPos, int _indexX, int _indexY, Tuple<bool, Tuple<int, GameObject>> _ladderNode, bool _healthStation)
+    public Node(bool _walkable, Vector3 _worldPos, int _indexX, int _indexY, Tuple<bool, Tuple<int, GameObject>> _ladderNode, bool _healthStation, GameObject _healthStationObj)
     {
         // Is node walkable & world position.
         walkable = _walkable;
@@ -120,5 +127,6 @@ public class Node
 
         // Is this grid space a health station.
         healthStation = _healthStation;
+        healthStationObj = _healthStationObj;
     }
 }

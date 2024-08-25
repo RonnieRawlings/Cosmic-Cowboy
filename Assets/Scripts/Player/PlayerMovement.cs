@@ -264,7 +264,11 @@ public class PlayerMovement : MonoBehaviour
 
         // Enables click text for health station node.
         TextMeshProUGUI interactText = uiCanvas.transform.Find("HealthInteract").GetComponent<TextMeshProUGUI>();
-        if (bestPath[bestPath.Count - 1].IsHealthStation) { interactText.enabled = true; }
+        if (bestPath[bestPath.Count - 1].IsHealthStation && bestPath[bestPath.Count - 1].HealthStationObj.
+            GetComponent<HealthStation>() != null) 
+        { 
+            interactText.enabled = true; 
+        }
         else { interactText.enabled = false; }
 
         // Waits before changing turns.

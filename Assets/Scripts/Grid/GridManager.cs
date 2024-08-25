@@ -85,8 +85,10 @@ public class GridManager : MonoBehaviour
                     // If sphere hits HealthStation layer, retuns true.
                     bool isHealthStation = Physics.CheckSphere(worldPoint, gridData[i].NodeRadius / 3, LayerMask.GetMask("HealthStation"));
 
+
                     // Finds ladderData script, assigns linked ladder to linkedNode.
                     GameObject linkedNode = null;
+                    GameObject healthStationObj = null;
                     if (isLadder)
                     {
                         // Sends SphereCast down to find ladder obj.
@@ -101,11 +103,22 @@ public class GridManager : MonoBehaviour
 
                         // Ladder node walkable override.
                         isWalkable = true;
+                    }                    
+                    else if (isHealthStation)
+                    {
+                        // Sends SphereCast down to find ladder obj.
+                        RaycastHit hit;
+                        Vector3 startPoint = worldPoint + new Vector3(0, 100f, 0);
+                        if (Physics.SphereCast(startPoint, gridData[i].NodeRadius / 3, Vector3.down, out hit, Mathf.Infinity, 
+                                LayerMask.GetMask("HealthStation")))
+                        {
+                            healthStationObj = hit.collider.gameObject;
+                        }
                     }
 
                     // Create node at position, uses constructor to assign values.
                     nodeGrids[nodeGrids.Count - 1][x, y] = new Node(isWalkable, worldPoint, x, y, new Tuple<bool, Tuple<int, GameObject>>
-                        (isLadder, new Tuple<int, GameObject>(i, linkedNode)), isHealthStation);
+                        (isLadder, new Tuple<int, GameObject>(i, linkedNode)), isHealthStation, healthStationObj);
                 }
             }
         }       

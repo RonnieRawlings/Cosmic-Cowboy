@@ -11,7 +11,9 @@ GameObject:
   - component: {fileID: 2659632912634771739}
   - component: {fileID: 1389133571864098494}
   - component: {fileID: 3793093934718616180}
-  m_Layer: 0
+  - component: {fileID: 372383087788410677}
+  - component: {fileID: 7543760448196331891}
+  m_Layer: 15
   m_Name: scifi-medical-charger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -61,11 +63,11 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31b29cea830e0e24da72018652e5ed31, type: 2}
-  - {fileID: 2100000, guid: 64a4684ba67ced04c811f6174e678a22, type: 2}
+  - {fileID: 2100000, guid: dbb3cc5f74d581e4a9304e6ec0008081, type: 2}
+  - {fileID: 2100000, guid: dbb3cc5f74d581e4a9304e6ec0008081, type: 2}
   - {fileID: 2100000, guid: c78b6e378cced6e49b9586bae01cbc5b, type: 2}
   - {fileID: 2100000, guid: 700ae469e5be9ac4095d29b97116027a, type: 2}
-  - {fileID: 2100000, guid: c48ed0c67054fc24da0ac1cced5a308c, type: 2}
+  - {fileID: 2100000, guid: dbb3cc5f74d581e4a9304e6ec0008081, type: 2}
   - {fileID: 2100000, guid: fb045539f4b18a242aca8e57e88c5cd7, type: 2}
   - {fileID: 2100000, guid: 7d937c04fbb734546b29eb971936bb5c, type: 2}
   m_StaticBatchInfo:
@@ -89,3 +91,37 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &372383087788410677
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3432651827575268257}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.741951, y: 2.608534, z: 0.9854431}
+  m_Center: {x: -0.018936157, y: 1.304267, z: -0.8666611}
+--- !u!114 &7543760448196331891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3432651827575268257}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d702e84af4c95b24d94ea83efccf2a42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthIncrease: 50

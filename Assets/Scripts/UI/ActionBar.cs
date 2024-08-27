@@ -71,7 +71,7 @@ public class ActionBar : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         }
     }
 
-    private void OnEnable()
+    private void Start()
     {
         // Sets ability range, uses weapon value if using weapon.
         if (isMelee) { abilityRange = 1; }

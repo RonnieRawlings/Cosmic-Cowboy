@@ -69,6 +69,9 @@ public class AiInitlization : MonoBehaviour
         }
     }
 
+    // Is this enemy a turret.
+    [SerializeField] private bool isTurrent;
+
     // Called once on script initlization.
     void OnEnable()
     {
@@ -78,14 +81,17 @@ public class AiInitlization : MonoBehaviour
         // Sets up enemy in BattleInfo.
         IncludeInBattle();
 
-        // Detaches path from obj.
-        DetachPath();
+        // Turrents don't have a path, or rand anims.
+        if (!isTurrent)
+        {
+            // Detaches path from obj.
+            DetachPath();
 
-        // Change idle anim speed slighlty.
-        Animator anim = GetComponent<Animator>();
-        anim.SetFloat("idleSpeed", Random.Range(0.7f, 1f));
-
-
+            // Change idle anim speed slighlty.
+            Animator anim = GetComponent<Animator>();
+            anim.SetFloat("idleSpeed", Random.Range(0.7f, 1f));
+        }
+        
         // Allows current status to be checked.
         this.GetComponent<CheckAIStatus>().enabled = true;
     }

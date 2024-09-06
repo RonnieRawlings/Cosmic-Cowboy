@@ -8,7 +8,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.VFX;
 
-public class AIMovement : MonoBehaviour
+public class AIMovement : BaseAI
 {
     // Ref to gridManager script.
     [SerializeField] private Pathfinding findPath;

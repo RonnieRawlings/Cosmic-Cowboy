@@ -125,7 +125,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc7a5fcb52e2904489e0a43c9e24cb25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isTurrent: 1
+  isTurret: 1
 --- !u!114 &8317403467885701851
 MonoBehaviour:
   m_ObjectHideFlags: 0

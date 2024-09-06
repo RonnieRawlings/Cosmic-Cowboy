@@ -10,12 +10,21 @@ public class CheckAIStatus : MonoBehaviour
     // Current health of AI Enemy.
     private int currentHealth;
 
-    // Triggered when enemy health is 0.
-    private bool hasDied;
+    // EnemyType of Turret + When enemy health is 0.
+    private bool isTurret, hasDied;
 
     // All possible death SFXs.
     [SerializeField] private List<AudioClip> deathSFX;
- 
+
+    #region Properties
+
+    public bool IsTurret
+    {
+        set { isTurret = value; }
+    }
+
+    #endregion
+
     /// <summary> method <c>CheckStatus</c> checks if AI has been defeated, destroyes if so. </summary>
     public void CheckStatus()
     {
@@ -37,13 +46,23 @@ public class CheckAIStatus : MonoBehaviour
             BattleInfo.levelEnemyTurns.Remove(this.gameObject.name);
 
             // Unmarks current node as occupied.
-            if (GetComponent<AIMovement>().CurrentNode != null)
+            BaseAI aiScript = null;
+            if (isTurret) { aiScript = GetComponent<TurretAI>(); }
+            else
             {
-                GetComponent<AIMovement>().CurrentNode.Occupied = null;
-            }
+                aiScript = GetComponent<AIMovement>();
+
+                // Cast to AIMovement to access CurrentNode
+                AIMovement aiMovementScript = aiScript as AIMovement;
+
+                if (aiMovementScript != null && aiMovementScript.CurrentNode != null)
+                {
+                    aiMovementScript.CurrentNode.Occupied = null;
+                }
+            }        
                       
             // Disable components
-            GetComponent<AIMovement>().enabled = false;
+            aiScript.enabled = false;
             GetComponent<EnemyHoverInfo>().enabled = false;
 
             // Remove hoverData entirly.

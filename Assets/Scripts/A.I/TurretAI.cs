@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Net;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.VFX;
 
 public class TurretAI : BaseAI
 {
@@ -13,6 +14,145 @@ public class TurretAI : BaseAI
 
     // Grid the AI is currently on.
     [SerializeField] private int currentGrid = 0;
+
+    // Gunshot (MuzzleFlash) VFX.
+    [SerializeField] private List<VisualEffect> muzzelFlashes;
+
+    // Shot SFX.
+    [SerializeField] private AudioClip shotSFX;
+
+    /// <summary> method <c>AttackPlayer</c> tries to damage the player when in range. </summary>
+    public IEnumerator AttackPlayer()
+    {
+        // Weapon attached to the AI obj.
+        WeaponValues attachtedWeapon = GetComponentInChildren<WeaponValues>();
+
+        // Rotate turret to face player.
+        yield return RotateToFacePlayer(BattleInfo.player);
+
+        // Chance of AIs attack landing.
+        int attackChance = attachtedWeapon.baseAccuracy;
+        if (BattleInfo.playerInCover)
+        {
+            // Decreases hit chance by player evasion.
+            attackChance -= BattleValues.coverEvasionChance;
+        }
+
+        int baseAccuracy = Mathf.RoundToInt((float)GetComponentInChildren<EnemyStats>().perception /
+            SkillsAndClasses.playerStats["Fitness"] * attackChance);
+
+        // Waits before attacking.
+        yield return new WaitForSeconds(0.75f);
+
+        // Plays muzzle flash VFX.
+        if (muzzelFlashes != null)
+        {
+            for (int i = 0; i < muzzelFlashes.Count; i++)
+            {
+                muzzelFlashes[i].Play();
+            }
+        }
+        GetComponent<AudioSource>().PlayOneShot(shotSFX);
+
+        // Only remove health if hit attack chance.
+        if (BattleInfo.CalculateAttackChance(baseAccuracy))
+        {
+            // Player's player hit anim + VFX.
+            BattleInfo.player.GetComponent<Animator>().SetBool("isHit", true);
+            SetHitEffect();
+
+            BattleInfo.player.GetComponent<AudioSource>().PlayOneShot(BattleInfo.player.GetComponent<PlayerMovement>().
+                playerAnimationSFX[0]);
+
+            // Checks if attack is a crit.
+            int attackDamage = BattleInfo.CalculateDamage(attachtedWeapon.baseDamage, GetComponentInChildren<EnemyStats>().toughness,
+                SkillsAndClasses.playerStats["Toughness"]);
+
+            int critChance = Mathf.RoundToInt((float)GetComponentInChildren<EnemyStats>().luck /
+                SkillsAndClasses.playerStats["Luck"] * attachtedWeapon.critChance);
+
+            if (BattleInfo.CalculateAttackChance(critChance))
+            {
+                // Increases damage by multiplyer.
+                attackDamage = BattleInfo.ApplyCritMultiplyer(attackDamage, attachtedWeapon.critMultiplyer);
+
+                Debug.Log("AI Attack Crit!");
+                StartCoroutine(CritEffect());
+            }
+            else
+            {
+                StartCoroutine(HitEffect());
+            }
+
+            // Applyies damage to player.
+            BattleInfo.currentPlayerHealth -= attackDamage;
+            Debug.Log("AI Attack Success!");
+
+        }
+        else
+        {
+            Debug.Log("AI Attack Missed!");
+            StartCoroutine(MissEffect());
+        }      
+
+        // Waits, ends turn.
+        yield return new WaitForSeconds(1f);
+
+        // Ends player anim.
+        BattleInfo.player.GetComponent<Animator>().SetBool("isHit", false);
+
+        // Update enemies in range.
+        BattleInfo.checkRange.CheckForEnemies();
+
+        // Ends this AIs turn.       
+        BattleInfo.levelEnemyTurns[gameObject.name] = false;
+        BattleInfo.hasLockedEnemy = false;
+    }
+
+    /// <summary> coroutine <c>RotateToFacePlayer</c> has the enemy rotate to face the player before attacking. </summary>
+    public IEnumerator RotateToFacePlayer(GameObject player)
+    {
+        // Calculate direction & target rot.
+        Vector3 direction = (player.transform.position - transform.position).normalized;
+        Vector3 targetDirection = new Vector3(direction.x, 0, direction.z);
+
+        // Calculate total angle & time for rotation
+        float totalAngle = Vector3.Angle(transform.forward, targetDirection);
+        float totalTime = totalAngle / 5;
+
+        // Time since move/rotation began.
+        float elapsedTime = 0;
+
+        // Rotate enemy to face the player.
+        while (Vector3.Angle(transform.forward, targetDirection) > 3f)
+        {
+            elapsedTime += Time.deltaTime;
+            float maxAngleChange = elapsedTime / totalTime * totalAngle;
+            transform.forward = Vector3.RotateTowards(transform.forward, targetDirection, maxAngleChange * Mathf.Deg2Rad, 0.0f);
+            yield return null;
+        }
+    }
+
+    /// <summary> method <c>SetHitEffect</c> moves the player's hit VFX to pos relevant to enemies hit. </summary>
+    public void SetHitEffect()
+    {
+        // Determines hit direction/position, uses raycast.
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, (BattleInfo.player.transform.position - transform.position).normalized, out hit,
+            Mathf.Infinity, LayerMask.GetMask("Player")))
+        {
+            // Moves hitVFX to player hit point.
+            if (hit.collider.gameObject == BattleInfo.player)
+            {
+                // Set new VFX position to hit point.
+                BattleInfo.player.transform.Find("hit").transform.position = new Vector3(hit.point.x, BattleInfo.player.transform.Find("hit").
+                    transform.position.y, hit.point.z);
+            }
+        }
+
+        // Plays VFX.
+        BattleInfo.player.transform.Find("hit").GetComponent<VisualEffect>().Play();
+    }
 
     /// <summary> method <c>DecideAction</c> uses nodePath (distance to target) to decide relevant action. </summary>
     public void DecideAction()
@@ -27,14 +167,8 @@ public class TurretAI : BaseAI
         // Decide which action to take.
         if (distanceToPlayer <= 10 && BattleInfo.currentPlayerGrid == currentGrid)
         {
-            Debug.Log("WILL ATTACK PLAYER WHEN IMPLEMENTED.");
-
-            // Update enemies in range.
-            BattleInfo.checkRange.CheckForEnemies();
-
-            // Ends this AIs turn.        
-            BattleInfo.levelEnemyTurns[gameObject.name] = false;
-            BattleInfo.hasLockedEnemy = false;
+            // In range so attack.
+            StartCoroutine(AttackPlayer());
         }
         else
         {

@@ -206,12 +206,11 @@ GameObject:
   - component: {fileID: 5477783315924752183}
   - component: {fileID: 8868254496801798936}
   - component: {fileID: 6501166079163160733}
-  - component: {fileID: 6891720415523076141}
   - component: {fileID: 6740881428915013034}
   - component: {fileID: 8317403467885701851}
   - component: {fileID: 7556296669118818886}
   - component: {fileID: 2427929731356565979}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Turret
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -234,7 +233,7 @@ Transform:
   - {fileID: 7444889302147739808}
   - {fileID: 3092749271002227122}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!33 &8868254496801798936
 MeshFilter:
@@ -289,28 +288,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &6891720415523076141
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8199217165722251784}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -5428512973531539129, guid: bc5552168cec8684c9ce4333661150eb, type: 3}
 --- !u!114 &6740881428915013034
 MonoBehaviour:
   m_ObjectHideFlags: 0

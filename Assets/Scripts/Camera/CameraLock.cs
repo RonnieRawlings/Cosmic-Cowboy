@@ -58,17 +58,20 @@ public class CameraLock : MonoBehaviour
         // Player pos + offset, for final.
         Vector3 finalPos = enemy.position;
 
-        // Interpolates between current & final pos.
-        Vector3 smoothPos = Vector3.Lerp(transform.parent.position, finalPos, 0.025f);
+        // Interpolates between current & final pos (only if the enemy is not stationary).
+        if (Vector3.Distance(transform.parent.position, finalPos) > 0.1f)
+        {
+            Vector3 smoothPos = Vector3.Lerp(transform.parent.position, finalPos, 0.025f);
+            transform.parent.position = smoothPos;
+        }
 
-        // Actually updates pos.
-        transform.parent.position = smoothPos;
+        // Rotate cam behind enemy, focusing on enemy's rotation.
+        Quaternion finalRot = Quaternion.LookRotation(enemy.forward);
 
-        // Rotate cam behind enemy, prevents player being out of shot.
-        Quaternion finalRot = Quaternion.LookRotation(enemy.position - transform.parent.position);
-        transform.parent.rotation = Quaternion.Lerp(transform.parent.rotation, finalRot, 0.025f);
+        // Smoothly rotate the camera even if the enemy is stationary.
+        transform.parent.rotation = Quaternion.Lerp(transform.parent.rotation, finalRot, 0.1f);
 
-        // Check if the camera has reached the enemy.
+        // Check if the camera has reached the enemy position or if the turret's rotation has been locked.
         if (Vector3.Distance(transform.parent.position, finalPos) < 0.1f && !BattleInfo.hasLockedEnemy)
         {
             BattleInfo.hasLockedEnemy = true;

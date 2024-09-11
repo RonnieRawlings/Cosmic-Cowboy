@@ -182,7 +182,7 @@ public class GridVisuals : MonoBehaviour
         {
             // Ref node is enemy node, if enemy hovered.
             referenceNode = gridM.FindNodeFromWorldPoint(BattleInfo.hoveredEnemy.transform.position,
-                BattleInfo.hoveredEnemy.GetComponent<AIMovement>().CurrentGrid);
+                BattleInfo.hoveredEnemy.GetComponent<BaseAI>().CurrentGrid);
         }
 
         // If the referenceNode is the same as the previousRefNode, return from the method

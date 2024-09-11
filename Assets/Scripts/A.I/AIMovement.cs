@@ -13,9 +13,6 @@ public class AIMovement : BaseAI
     // Ref to gridManager script.
     [SerializeField] private Pathfinding findPath;
 
-    // Node the AI currently occupies.
-    [SerializeField] private Node currentNode;
-
     // Patrol points, start/end.
     [SerializeField] private GameObject startPoint, endPoint;
 
@@ -31,35 +28,6 @@ public class AIMovement : BaseAI
     // Current turns decison is made.
     private bool decisonMade = false;
 
-    // Grid the AI is currently on.
-    [SerializeField] private int currentGrid = 0;
-    
-    #region Variable Properties
-
-    public Node CurrentNode
-    {
-        get { return currentNode; }
-        set { currentNode = value; }
-    }
-
-    public int CurrentGrid
-    {
-        get { return currentGrid; }
-    }
-
-    #endregion
-
-    /// <summary> method <c>SetStartNode</c> sets currentNode to first node. </summary>
-    public void SetStartNode()
-    {
-        // Sets start node if no node is present.
-        if (currentNode == null)
-        {
-            // Sets AIs starting node in AIMovement.
-            GetComponent<AIMovement>().CurrentNode = BattleInfo.gridManager.
-                GetComponent<GridManager>().FindNodeFromWorldPoint(transform.position, currentGrid);
-        }
-    }
 
     /// <summary> method <c>AttackPlayer</c> tries to damage the player when in range. </summary>
     public IEnumerator AttackPlayer()
@@ -500,7 +468,7 @@ public class AIMovement : BaseAI
         }
 
         // Checks if start node should be set.
-        SetStartNode();
+        SetStartNode(currentGrid);
 
         // Finds best path to target.        
         List<Node> nodePath = findPath.FindPath(transform.position, BattleInfo.player.transform.position, currentGrid);
@@ -558,20 +526,7 @@ public class AIMovement : BaseAI
 
         // Resets decison making var.
         decisonMade = false;       
-    }
-
-    public IEnumerator SetFirstOccupied()
-    {
-        yield return new WaitForEndOfFrame();
-
-        // Sets occupied status of start node.
-        BattleInfo.gridManager.GetComponent<GridManager>().FindNodeFromWorldPoint(transform.position, currentGrid).
-            Occupied = this.gameObject;
-
-        // Push AI unit to start node middle.
-        Node startNode = BattleInfo.gridManager.GetComponent<GridManager>().FindNodeFromWorldPoint(transform.position, currentGrid);
-        transform.position = new Vector3(startNode.WorldPos.x, transform.position.y, startNode.WorldPos.z - 0.75f);
-    }
+    }   
 
     /// <summary> coroutine <c>CritEffect</c> allows crit effect to play, disables canvas again once finished. </summary>
     public IEnumerator CritEffect()
@@ -623,7 +578,7 @@ public class AIMovement : BaseAI
 
     private void Start()
     {
-        StartCoroutine(SetFirstOccupied());
+        StartCoroutine(SetFirstOccupied(currentGrid));
 
         // Gets squad comp if part of one.
         if (GetComponent<SquadMember>() != null) { squadScript = GetComponent<SquadMember>(); }

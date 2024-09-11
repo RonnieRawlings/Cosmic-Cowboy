@@ -12,9 +12,6 @@ public class TurretAI : BaseAI
     // Current turns decison is made.
     private bool decisonMade = false;
 
-    // Grid the AI is currently on.
-    [SerializeField] private int currentGrid = 0;
-
     // Gunshot (MuzzleFlash) VFX.
     [SerializeField] private List<VisualEffect> muzzelFlashes;
 
@@ -160,12 +157,15 @@ public class TurretAI : BaseAI
         // Exits if already run.
         if (decisonMade) { return; }
 
+        // Checks if start node should be set.
+        SetStartNode(currentGrid);
+
         // Finds best path to target.        
         float distanceToPlayer = Vector3.Distance(BattleInfo.player.transform.position, transform.position);
         Debug.Log(distanceToPlayer);
 
         // Decide which action to take.
-        if (distanceToPlayer <= 10 && BattleInfo.currentPlayerGrid == currentGrid)
+        if (distanceToPlayer <= GetComponentInChildren<EnemyStats>().DetectionRange && BattleInfo.currentPlayerGrid == currentGrid)
         {
             // In range so attack.
             StartCoroutine(AttackPlayer());
@@ -245,6 +245,12 @@ public class TurretAI : BaseAI
         yield return new WaitForSeconds(0.6f);
         BattleInfo.missCanvas.SetActive(false);
         BattleInfo.missCanvas.GetComponent<ShotEffects>().PlayerHit = false;
+    }
+
+    private void Start()
+    {
+        // Sets starting node status.
+        StartCoroutine(SetFirstOccupied(currentGrid));
     }
 
     // Called once every frame.

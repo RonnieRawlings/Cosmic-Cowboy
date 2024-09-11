@@ -45,22 +45,17 @@ public class CheckAIStatus : MonoBehaviour
             BattleInfo.levelEnemiesList.Remove(this.gameObject.name);
             BattleInfo.levelEnemyTurns.Remove(this.gameObject.name);
 
-            // Unmarks current node as occupied.
+            // Sets script relevant to enemy type.
             BaseAI aiScript = null;
             if (isTurret) { aiScript = GetComponent<TurretAI>(); }
-            else
+            else{ aiScript = GetComponent<AIMovement>(); }
+
+            // Unmarks occupied node.
+            if (aiScript != null && aiScript.CurrentNode != null)
             {
-                aiScript = GetComponent<AIMovement>();
+                aiScript.CurrentNode.Occupied = null;
+            }
 
-                // Cast to AIMovement to access CurrentNode
-                AIMovement aiMovementScript = aiScript as AIMovement;
-
-                if (aiMovementScript != null && aiMovementScript.CurrentNode != null)
-                {
-                    aiMovementScript.CurrentNode.Occupied = null;
-                }
-            }        
-                      
             // Disable components
             aiScript.enabled = false;
             GetComponent<EnemyHoverInfo>().enabled = false;
@@ -86,6 +81,9 @@ public class CheckAIStatus : MonoBehaviour
 
         // Play death SFX.        
         GetComponent<AudioSource>().PlayOneShot(deathSFX[Random.Range(0, deathSFX.Count)]);
+
+        // If turret, remove (for now).
+        if (isTurret) { yield return new WaitForSeconds(2); Destroy(this.gameObject); }
 
         // Disable script.
         this.enabled = false;

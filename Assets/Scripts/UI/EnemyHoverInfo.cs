@@ -13,11 +13,14 @@ public class EnemyHoverInfo : MonoBehaviour
 
     // Outline/noOutline material shaders, renderer comp.
     [SerializeField] private Material outlineShader, noOutlineShader;
-    private SkinnedMeshRenderer meshRend;
+    private Renderer meshRend;
 
     // Material array refs.
     Material[] outlineMaterials;
     Material[] noOutlineMaterials;
+
+    // Node check or distance check.
+    [SerializeField] private bool checkViaDistance;
 
     // Is the player in the detection range.
     private bool inRange = false;
@@ -48,13 +51,13 @@ public class EnemyHoverInfo : MonoBehaviour
             if (transform.name == hit.transform.name)
             {
                 // Set materials as outline.
-                meshRend.materials = outlineMaterials;
+                if (outlineShader != null) { meshRend.materials = outlineMaterials; }
             }
         }
         else
         {
             // Sets materials as no outline.
-            meshRend.materials = noOutlineMaterials;
+            if (noOutlineShader != null) { meshRend.materials = noOutlineMaterials; }
         }
     }
 
@@ -67,19 +70,38 @@ public class EnemyHoverInfo : MonoBehaviour
         // Prevents unneeded checkes.
         if (compromisedShowing) { return; }
 
-        // Finds best path to target.        
-        List<Node> nodePath = BattleInfo.gridManager.GetComponent<Pathfinding>().FindPath(transform.position, 
-            BattleInfo.player.transform.position, GetComponent<AIMovement>().CurrentGrid);
-
-        // Player has left the detection range.
-        if (nodePath.Count > BattleInfo.levelEnemyStats[gameObject].DetectionRange) { compromisedShown = false; inRange = false; }
-        else { inRange = true; }
-
-        // Plays compromised if player is within detection range.
-        if (nodePath.Count <= BattleInfo.levelEnemyStats[gameObject].DetectionRange && !compromisedShown)
+        if (!checkViaDistance)
         {
-            StartCoroutine(PlayCompromised());
+            // Finds best path to target.        
+            List<Node> nodePath = BattleInfo.gridManager.GetComponent<Pathfinding>().FindPath(transform.position,
+                BattleInfo.player.transform.position, GetComponent<BaseAI>().CurrentGrid);
+
+            // Player has left the detection range.
+            if (nodePath.Count > BattleInfo.levelEnemyStats[gameObject].DetectionRange) { compromisedShown = false; inRange = false; }
+            else { inRange = true; }
+
+            // Plays compromised if player is within detection range.
+            if (inRange && !compromisedShown)
+            {
+                StartCoroutine(PlayCompromised());
+            }
         }
+        else
+        {
+            float distanceToPlayer = Vector3.Distance(BattleInfo.player.transform.position, transform.position);
+
+            if (distanceToPlayer <= GetComponentInChildren<EnemyStats>().DetectionRange)
+            {
+                inRange = true;
+            }
+            else { compromisedShown = false; inRange = false; }
+
+            // Plays compromised if player is within detection range.
+            if (inRange && !compromisedShown)
+            {
+                StartCoroutine(PlayCompromised());
+            }
+        }        
     }
 
     /// <summary> coroutine <c>PlayCompromised</c> plays the compromised animation, waits until completed. </summary>
@@ -122,21 +144,24 @@ public class EnemyHoverInfo : MonoBehaviour
     void Start()
     {
         // Gets rend comp, sets up material arrays.
-        meshRend = transform.Find("Extract5").GetComponent<SkinnedMeshRenderer>();
+        meshRend = GetComponentInChildren<Renderer>();
         outlineMaterials = new Material[meshRend.materials.Length];
         noOutlineMaterials = new Material[meshRend.materials.Length];
 
         // Sets each material array to correct shader.
         for (int i = 0; i < meshRend.materials.Length; i++)
         {
+            // Don't set mats if missing shaders.
+            if (outlineShader == null || noOutlineShader == null) { break; }
+
             outlineMaterials[i] = outlineShader;
             noOutlineMaterials[i] = noOutlineShader;
         }
 
         if (hoverCanvas == null)
-        { 
+        {
             // Sets materials as no outline.
-            meshRend.materials = noOutlineMaterials;
+            if (noOutlineShader != null) { meshRend.materials = noOutlineMaterials; }
 
             Destroy(this);            
         }

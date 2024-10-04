@@ -299,21 +299,22 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Felix Klein\r\nJack Mulford\r\nBlue Probert\r\nRonnie Rawlings\r\nJack
-    Cadle\r\nAdam\r\n\r\nVoices:\r\n\r\nToby Frost - Varder\r\nRyan Hill - Thadius\r\nLucy
-    June - A.M.I\r\nBen Norbury - Cowboy\r\nBlue Probert - Javier\r\n\r\nKickstarter
-    Backers:\r\n\r\nNathaniel Adams\r\nSuhel Ahmed\r\nParvel Shoirkov\r\nGeorge Donlevy\r\nRedemption
-    Day Comic\r\nToby Frost\r\nRichard James Pattie\r\nGerhard Klein\r\nPeter La
-    Farciola\r\nMario Malicki\r\nAlan Mulford\r\nNonbankMango\r\nMatthew Robinson\r\nSully
-    Walker\r\nDuy Tran\r\n\r\nPlaytesters:\r\n\r\nShrewko Aldone\r\nAswin Anil\r\nJohn
-    Anderson\r\nJake Aron Lawson\r\nAaron Bacon\r\nMeg Benedet\r\nAdam Buckley\r\nGeorge
-    Chandler\r\nAdam Charrot\r\nGeorge Chapman\r\nAlistair Crew\r\nHarry Croker\r\nSeb
-    Cuthbert\r\nDaniel Foster\r\nShannon Greely\r\nJoseph Hadley\r\nThomas Hall\r\nNicolas
-    Holemans\r\nJames Jenkins\r\nDave Jones\r\nFaith Jones\r\nLucas Jones\r\nSerena
-    Jones\r\nHedda Kalvo\r\nDaniel Largan\r\nJordan Martin\r\nRyan Mckeown\r\nDaiva
-    Mahendra\r\nMichael O\u2019Connor\r\nAdil Rauf\r\nLewis Robley\r\nEffie Sampson\r\nBerwyn
-    Smith\r\nMaddy Smith\r\nWill Smith\r\nMannan Soni\r\nChristopher Thompson\r\nSpikeVine\r\nJack
-    Washington\r\nPatrick Wright\r\n\r\nSpecial Thanks:\r\n\r\nSokol Murturi\r\n\r\n\r\n"
+  m_text: "Adam\rBeckett\nJack Cadle\r\nFelix Klein\r\nJack Mulford\r\nBlue Probert\r\nRonnie
+    Rawlings\r\n\r\nVoices:\r\n\r\nToby Frost - Varder\r\nRyan Hill - Thadius\r\nLucy
+    June - A.M.I\r\nBen Norbury - Cowboy\r\nBlue Probert - Javier\r\nBlue Probert
+    - Additional Voices\r\n\r\nKickstarter Backers:\r\n\r\nNathaniel Adams\r\nSuhel
+    Ahmed\r\nParvel Shoirkov\r\nGeorge Donlevy\r\nRedemption Day Comic\r\nToby Frost\r\nRichard
+    James Pattie\r\nGerhard Klein\r\nPeter La Farciola\r\nMario Malicki\r\nAlan Mulford\r\nNonbankMango\r\nMatthew
+    Robinson\r\nSully Walker\r\nDuy Tran\r\n\r\nPlaytesters:\r\n\r\nShrewko Aldone\r\nAswin
+    Anil\r\nJohn Anderson\r\nJake Aron Lawson\r\nAaron Bacon\r\nMeg Benedet\r\nAdam
+    Buckley\r\nGeorge Chandler\r\nAdam Charrot\r\nGeorge Chapman\r\nAlistair Crew\r\nHarry
+    Croker\r\nSeb Cuthbert\r\nDaniel Foster\r\nShannon Greely\r\nJoseph Hadley\r\nThomas
+    Hall\r\nNicolas Holemans\r\nJames Jenkins\r\nDave Jones\r\nFaith Jones\r\nLucas
+    Jones\r\nSerena Jones\r\nHedda Kalvo\r\nDaniel Largan\r\nJordan Martin\r\nRyan
+    Mckeown\r\nDaiva Mahendra\r\nMichael O\u2019Connor\r\nAdil Rauf\r\nLewis Robley\r\nEffie
+    Sampson\r\nBerwyn Smith\r\nMaddy Smith\r\nWill Smith\r\nMannan Soni\r\nChristopher
+    Thompson\r\nSpikeVine\r\nJack Washington\r\nPatrick Wright\r\n\r\nSpecial Thanks:\r\n\r\nSokol
+    Murturi\r"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e584f9773f160ea47b1b2ba421dc7f72, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: e584f9773f160ea47b1b2ba421dc7f72, type: 2}

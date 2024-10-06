@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311348, g: 0.38078675, b: 0.3588003, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.35872743, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -6777,6 +6777,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: scifi-medical-charger
       objectReference: {fileID: 0}
+    - target: {fileID: 7543760448196331891, guid: 932a8dc27c4cdf84bb00d0156652f1b0,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7291,7 +7296,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d9b2c25aecc94b4f9df1fe43607de2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activeMenu: {fileID: 0}
+  activeMenu: {fileID: 344628353}
 --- !u!4 &638482193 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2504991161107705750, guid: a8850f2f730573643aa1bc60ed9100d6,

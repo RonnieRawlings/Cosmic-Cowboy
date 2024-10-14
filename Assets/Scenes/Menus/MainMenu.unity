@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.35872743, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311348, g: 0.38078675, b: 0.3588003, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -691,8 +691,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -13.683}
   m_AnchorMin: {x: 0.86700004, y: 0.3861421}
   m_AnchorMax: {x: 0.86700004, y: 0.3861421}
-  m_AnchoredPosition: {x: 1, y: -2}
-  m_SizeDelta: {x: 188.518, y: 52.050995}
+  m_AnchoredPosition: {x: 12.596, y: -10.654}
+  m_SizeDelta: {x: 161.89, y: 63.382}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &26596288
 MonoBehaviour:
@@ -7228,7 +7228,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1600, y: 1200}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -7982,7 +7982,7 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -8060,8 +8060,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 73.00006, y: 194}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: 100.02398, y: 230.593}
+  m_SizeDelta: {x: 229.444, y: 46.29}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &713140051
 MonoBehaviour:
@@ -8547,7 +8547,7 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -8625,8 +8625,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 73.00006, y: -88.221985}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: 88.572, y: -102.596}
+  m_SizeDelta: {x: 171.145, y: 47.146}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &768274869
 MonoBehaviour:
@@ -8855,12 +8855,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1600, y: 1200}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -9281,7 +9281,7 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -9844,7 +9844,7 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -9982,8 +9982,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 73.00006, y: 54.28601}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: 100.61699, y: 64.27}
+  m_SizeDelta: {x: 262.553, y: 46.001}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &846372393
 MonoBehaviour:
@@ -13437,7 +13437,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.88847923, y: 0.6443889}
   m_AnchorMax: {x: 0.88847923, y: 0.6443889}
-  m_AnchoredPosition: {x: -72, y: -21}
+  m_AnchoredPosition: {x: -70, y: -22}
   m_SizeDelta: {x: 200.432, y: 59.742996}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1116024757
@@ -14417,8 +14417,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.19475, y: 0.487388}
   m_AnchorMax: {x: 0.19475, y: 0.487388}
-  m_AnchoredPosition: {x: -0.20874023, y: 3.4689999}
-  m_SizeDelta: {x: 299.905, y: 44.814}
+  m_AnchoredPosition: {x: 2.9100037, y: 5.028}
+  m_SizeDelta: {x: 218.82, y: 39.616}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1171677501
 MonoBehaviour:
@@ -16454,8 +16454,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 61.75348, y: -78.204285}
-  m_SizeDelta: {x: 111.9305, y: 40.0409}
+  m_AnchoredPosition: {x: 74.35, y: -93.499}
+  m_SizeDelta: {x: 137.123, y: 47.239}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!82 &1293613498
 AudioSource:
@@ -16677,7 +16677,7 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -18545,12 +18545,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1600, y: 1200}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -20955,8 +20955,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -5.042}
   m_AnchorMin: {x: 0.69285417, y: 0.39930063}
   m_AnchorMax: {x: 0.69285417, y: 0.39930063}
-  m_AnchoredPosition: {x: 2.7141113, y: 4.1730957}
-  m_SizeDelta: {x: 188.518, y: 52.051}
+  m_AnchoredPosition: {x: 13.034, y: 4.88}
+  m_SizeDelta: {x: 207.845, y: 55.274}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1625229734
 MonoBehaviour:
@@ -22633,8 +22633,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 73.00006, y: -216.20001}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: 95.196, y: -266.16525}
+  m_SizeDelta: {x: 140.826, y: 48.388}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1700724367
 MonoBehaviour:
@@ -22726,7 +22726,7 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 0}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -25499,8 +25499,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 9.272}
   m_AnchorMin: {x: 0.15135416, y: 0.3861421}
   m_AnchorMax: {x: 0.15135416, y: 0.3861421}
-  m_AnchoredPosition: {x: 1.7609863, y: -3.0388184}
-  m_SizeDelta: {x: 298.371, y: 52.051}
+  m_AnchoredPosition: {x: -2.7260132, y: -2.0630035}
+  m_SizeDelta: {x: 234.174, y: 52.405}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1902159609
 MonoBehaviour:

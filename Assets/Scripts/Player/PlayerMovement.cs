@@ -182,7 +182,7 @@ public class PlayerMovement : MonoBehaviour
     public IEnumerator MovePlayer(List<Node> bestPath)
     {
         // Prevents issues with further movement.
-        if (bestPath.Count > 5) 
+        if (bestPath.Count > BattleValues.playerTileAmount || bestPath.Count <= 0) 
         {
             // Resets path, exits routine.
             gridManager.GetComponent<GridVisuals>().mouseToPlayer = null;

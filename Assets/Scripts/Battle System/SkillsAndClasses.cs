@@ -31,7 +31,7 @@ public static class SkillsAndClasses
                 {
                     { "Endurance", 0 }, { "Fire-Power", 10 },
                     { "Perception", 0 }, { "Toughness", 10 }, { "Fitness", 0 }, 
-                    { "Luck", 0 }
+                    { "Luck", 0 }, { "Lethality", 0 }
                 } 
             },
 
@@ -39,15 +39,15 @@ public static class SkillsAndClasses
                 {
                     { "Endurance", 0 }, { "Fire-Power", 0 },
                     { "Perception", 10 }, { "Toughness", 0 }, { "Fitness", 0 },
-                    { "Luck", 10 }
+                    { "Luck", 0 }, { "Lethality", 10 }
                 }
             },
 
             { "Nomad", new Dictionary<string, int>()
                 {
-                    { "Endurance", 10 }, { "Fire-Power", 0 },
-                    { "Perception", 0 }, { "Toughness", 0 }, { "Fitness", 10 },
-                    { "Luck", 0 }
+                    { "Endurance", 0 }, { "Fire-Power", 0 },
+                    { "Perception", 10 }, { "Toughness", 0 }, { "Fitness", 0 },
+                    { "Luck", 0 }, { "Lethality", 10 }
                 }
             }
         };
@@ -56,7 +56,7 @@ public static class SkillsAndClasses
         {
             { "Endurance", 5 }, { "Fire-Power", 1 },
             { "Perception", 2 }, { "Toughness", 1 }, { "Fitness", 1 },
-            { "Luck", 1 }
+            { "Luck", 1 }, { "Lethality", 1 }
         };
 
         // Base player stats, all 1.
@@ -64,7 +64,7 @@ public static class SkillsAndClasses
         {
             { "Endurance", 50 }, { "Fire-Power", 50 },
             { "Perception", 50 }, { "Toughness", 50 }, { "Fitness", 50 },
-            { "Luck", 50 }
+            { "Luck", 50 }, { "Lethality", 50 }
         };
     }
 

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44651437, g: 0.496435, b: 0.57483196, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -7648,7 +7648,6 @@ GameObject:
   - component: {fileID: 1021919610}
   - component: {fileID: 1021919609}
   - component: {fileID: 1021919606}
-  - component: {fileID: 1021919611}
   - component: {fileID: 1021919612}
   m_Layer: 5
   m_Name: Points Left Number
@@ -7719,18 +7718,6 @@ RectTransform:
   m_AnchoredPosition: {x: 5.299999, y: 61}
   m_SizeDelta: {x: 422.25, y: 305.127}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1021919611
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1021919605}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 777c2f7cf413aa343afa8883c9a42d79, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1021919612
 MonoBehaviour:
   m_ObjectHideFlags: 0
